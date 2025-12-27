@@ -7,14 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Application\DTOs\" />
-    <Folder Include="Application\Interfaces\" />
-    <Folder Include="Application\Services\" />
-    <Folder Include="Domain\Exceptions\" />
-    <Folder Include="Infrastructire\Repositories\" />
-    <Folder Include="Infrastructire\Persistence\" />
-    <Folder Include="Presentation\Menus\" />
-    <Folder Include="Presentation\Helpers\" />
+    <Folder Include="Moodle.Application\DTOs\" />
+    <Folder Include="Moodle.Application\Interfaces\" />
+    <Folder Include="Moodle.Application\Services\" />
+    <Folder Include="Moodle.Presentation\Menus\" />
+    <Folder Include="Moodle.Presentation\Helpers\" />
+    <Folder Include="Presentation\" />
   </ItemGroup>
 
 </Project>

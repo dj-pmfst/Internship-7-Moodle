@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "FWeXYRrFJdU=",
+  "dgSpecHash": "77fbHdJNFbA=",
   "success": true,
   "projectFilePath": "C:\\Users\\DORA\\source\\repos\\moodle\\moodle\\Moodle.Application\\Moodle.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\DORA\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512"
+  ],
   "logs": []
 }
