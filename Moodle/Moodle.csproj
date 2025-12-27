@@ -10,8 +10,7 @@
     <Folder Include="Application\DTOs\" />
     <Folder Include="Application\Interfaces\" />
     <Folder Include="Application\Services\" />
-    <Folder Include="Application\Validators\" />
-    <Folder Include="Domain\Validations\" />
+    <Folder Include="Domain\Exceptions\" />
     <Folder Include="Infrastructire\Repositories\" />
     <Folder Include="Infrastructire\Persistence\" />
     <Folder Include="Presentation\Menus\" />

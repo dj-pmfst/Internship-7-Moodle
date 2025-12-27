@@ -1,6 +1,4 @@
 ﻿using Moodle.Application.Common.Validations;
-using Moodle.Application.Common.Validations.Domain.Common.Validation;
-using System.ComponentModel.DataAnnotations;
 using System.Text.RegularExpressions;
 using ValidationResult = Moodle.Application.Common.Validations.ValidationResult;
 
