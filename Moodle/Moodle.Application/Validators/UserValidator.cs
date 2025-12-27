@@ -1,4 +1,4 @@
-﻿using Moodle.Application.Common.Validations;
+﻿using Moodle.Domain.Common.Validations;
 using Moodle.Domain.Entities;
 
 namespace Moodle.Application.Validators

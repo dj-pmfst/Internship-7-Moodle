@@ -1,0 +1,83 @@
+Folder PATH listing
+Volume serial number is 2C65-32A8
+C:.
+|   appsettings.Development.json
+|   appsettings.json
+|   Moodle.csproj
+|   Moodle.csproj.user
+|   Moodle.http
+|   structure.txt
+|   
++---Application
+|   +---Common
+|   |   \---Validations
+|   |           ValidationItem.cs
+|   |           ValidationResult.cs
+|   |           ValidationSeverity.cs
+|   |           ValidationType.cs
+|   |           
+|   +---DTOs
+|   +---Interfaces
+|   +---Services
+|   \---Validators
+|           CourseValidator.cs
+|           EnrollmentValidator.cs
+|           UserValidator.cs
+|           
++---bin
+|   \---Debug
+|       \---net8.0
++---Domain
+|   +---Entities
+|   |       Announcement.cs
+|   |       Course.cs
+|   |       CourseEnrollment.cs
+|   |       Material.cs
+|   |       Message.cs
+|   |       User.cs
+|   |       
+|   +---Enums
+|   |       Roles.cs
+|   |       
+|   \---Validators
+|           EmailValidator.cs
+|           UrlValidator.cs
+|           ValidationPassword.cs
+|           
++---Infrastructire
+|   +---Persistence
+|   \---Repositories
+|           AnnouncementRepository.cs
+|           CourseRepository.cs
+|           EnrollmentRepository.cs
+|           MaterialRepository.cs
+|           MessageRepository.cs
+|           UserRepository.cs
+|           
++---obj
+|   |   Moodle.csproj.nuget.dgspec.json
+|   |   Moodle.csproj.nuget.g.props
+|   |   Moodle.csproj.nuget.g.targets
+|   |   project.assets.json
+|   |   project.nuget.cache
+|   |   
+|   \---Debug
+|       \---net8.0
+|           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|           |   Moodle.AssemblyInfo.cs
+|           |   Moodle.AssemblyInfoInputs.cache
+|           |   Moodle.assets.cache
+|           |   Moodle.GeneratedMSBuildEditorConfig.editorconfig
+|           |   Moodle.GlobalUsings.g.cs
+|           |   
+|           +---ref
+|           +---refint
+|           \---staticwebassets
++---Presentation
+|   |   Program.cs
+|   |   
+|   +---Helpers
+|   \---Menus
+\---Properties
+        launchSettings.json
+        

@@ -1,8 +1,8 @@
-﻿using Moodle.Application.Common.Validations;
+﻿using Moodle.Domain.Common.Validations;
 using System.Text.RegularExpressions;
-using ValidationResult = Moodle.Application.Common.Validations.ValidationResult;
+using ValidationResult = Moodle.Domain.Common.Validations.ValidationResult;
 
-namespace Moodle.Application.Validators.Domain
+namespace Moodle.Application.Validators.Format
 {
     public static class EmailValidator
     {

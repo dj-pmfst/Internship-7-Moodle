@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace Moodle.Application.Common.Validations
+namespace Moodle.Domain.Common.Validations
 {
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum ValidationType

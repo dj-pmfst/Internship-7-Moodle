@@ -1,4 +1,4 @@
-﻿namespace Moodle.Application.Validators.Domain
+﻿namespace Moodle.Moodle.Application.Validators.Format
 {
     public static class ValidatorEmail
     {
