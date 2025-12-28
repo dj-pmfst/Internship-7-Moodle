@@ -15,7 +15,7 @@ namespace Moodle.Domain.Entities
         public bool CanTeachCourse() => Role == Roles.profesor || Role == Roles.admin;
 
         public ICollection<CourseEnrollment> Courses { get; set; }
-        public ICollection<Course> Taughtcourses { get; set; }
+        public ICollection<Course> TaughtCourses { get; set; }
         public ICollection<Message> SentMessages { get; set; }
         public ICollection<Message> RecievedMessages { get; set; }
         public ICollection<Announcement> Announcements { get; set; }

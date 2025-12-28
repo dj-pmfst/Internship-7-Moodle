@@ -6,8 +6,8 @@ namespace Moodle.Application.Validators.Format
 {
     public static class EmailValidator
     {
-        private const int MinimumLength = 8;
-        private const int MaximumLength = 128;
+        private const int MinimumLength = 5;
+        private const int MaximumLength = 150;
 
         public static ValidationResult Validate(string password)
         {
