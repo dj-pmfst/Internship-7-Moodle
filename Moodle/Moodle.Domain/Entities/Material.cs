@@ -6,8 +6,7 @@
         public string Name { get; set; }
         public string Url { get; set; }
         public int CourseID { get; set; }
+        public Course Course { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
-
-        public ICollection<Course> Course { get; set; }
     }
 }
