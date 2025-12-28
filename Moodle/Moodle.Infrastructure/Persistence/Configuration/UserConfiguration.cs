@@ -30,7 +30,7 @@ namespace Moodle.Infrastructure.Persistence.Configuration
                 .HasForeignKey(m => m.SenderId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.HasMany(u => u.RecievedMessages)
+            builder.HasMany(u => u.ReceivedMessages)
                 .WithOne(m => m.Receiver)
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
