@@ -16,6 +16,7 @@ namespace Moodle.Infrastructure.Persistence
         public IAnnouncementRepository Announcements { get; }  
         public IMaterialRepository Materials {  get; }
         public IEnrollmentRepository Enrollments { get; }
+
         public UnitOfWork(MoodleDbContext context) 
         {
             _context = context;
