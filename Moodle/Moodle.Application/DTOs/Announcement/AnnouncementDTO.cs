@@ -1,4 +1,4 @@
-﻿namespace Moodle.Moodle.Application.DTOs.Announcement
+﻿namespace Moodle.Application.DTOs.Announcement
 {
     public class AnnouncementDTO
     {

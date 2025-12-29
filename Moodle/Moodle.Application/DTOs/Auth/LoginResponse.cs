@@ -1,6 +1,6 @@
 ﻿using Moodle.Domain.Enums;
 
-namespace Moodle.Moodle.Application.DTOs.Auth
+namespace Moodle.Application.DTOs.Auth
 {
     public class LoginResponse
     {

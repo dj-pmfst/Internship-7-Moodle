@@ -1,4 +1,4 @@
-﻿namespace Moodle.Moodle.Application.DTOs.Course
+﻿namespace Moodle.Application.DTOs.Course
 {
     public class EnrollStudentRequest
     {

@@ -1,4 +1,4 @@
-﻿namespace Moodle.Moodle.Application.DTOs.User
+﻿namespace Moodle.Application.DTOs.User
 {
     public class UpdateUserEmailRequest
     {
