@@ -6,7 +6,7 @@ namespace Moodle.Domain.Common.Validations
     public enum ValidationType
     {
         FormalValidation,
-        BussinessRule,
+        BusinessRule,
         SystemError
     }
 }

@@ -8,7 +8,7 @@
         public string Message { get; set; }
 
         public ValidationItem(string code, string message, ValidationSeverity severity,
-                      ValidationType type = ValidationType.BussinessRule)
+                      ValidationType type = ValidationType.BusinessRule)
         {
             Code = code;
             Message = message;
