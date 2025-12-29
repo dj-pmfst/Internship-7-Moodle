@@ -1,0 +1,180 @@
+Folder PATH listing
+Volume serial number is 2C65-32A8
+C:.
+|   .gitignore
+|   Moodle.slnx
+|   structure.txt
+|   
+\---Moodle
+    |   appsettings.Development.json
+    |   appsettings.json
+    |   Moodle.csproj
+    |   Moodle.csproj.user
+    |   Moodle.http
+    |   Moodle.sln
+    |   structure.txt
+    |   
+    +---bin
+    |   \---Debug
+    |       \---net8.0
+    +---Moodle.Application
+    |   |   Moodle.Application.csproj
+    |   |   
+    |   +---Common
+    |   |       ServiceResult.cs
+    |   |       
+    |   +---DTOs
+    |   |   +---Announcement
+    |   |   |       AnnouncementDTO.cs
+    |   |   |       CreateAnnouncementRequest.cs
+    |   |   |       
+    |   |   +---Auth
+    |   |   |       LoginRequest.cs
+    |   |   |       LoginResponse.cs
+    |   |   |       RegisterRequest.cs
+    |   |   |       
+    |   |   +---Course
+    |   |   |       CourseDetailsDTO.cs
+    |   |   |       CourseDTO.cs
+    |   |   |       EnrollStudentRequest.cs
+    |   |   |       
+    |   |   +---Material
+    |   |   |       AddMaterialRequest.cs
+    |   |   |       MaterialDTO.cs
+    |   |   |       
+    |   |   +---Message
+    |   |   |       ConversationDTO.cs
+    |   |   |       MessageDTO.cs
+    |   |   |       SendMessageRequest.cs
+    |   |   |       
+    |   |   \---User
+    |   |           ChangeRoleRequest.cs
+    |   |           UpdateUserEmailRequest.cs
+    |   |           UserDTO.cs
+    |   |           
+    |   +---Interfaces
+    |   |   |   IUnitOfWork.cs
+    |   |   |   
+    |   |   \---Repositories
+    |   |           IAnnouncementRepository.cs
+    |   |           ICourseRepository.cs
+    |   |           IEnrollmentRepository.cs
+    |   |           IMaterialRepository.cs
+    |   |           IMessageRepository.cs
+    |   |           IUserRepository.cs
+    |   |           
+    |   +---obj
+    |   |       Moodle.Application.csproj.nuget.dgspec.json
+    |   |       Moodle.Application.csproj.nuget.g.props
+    |   |       Moodle.Application.csproj.nuget.g.targets
+    |   |       project.assets.json
+    |   |       project.nuget.cache
+    |   |       
+    |   +---Services
+    |   |       AuthenticationService.cs
+    |   |       
+    |   \---Validators
+    |       |   CourseValidator.cs
+    |       |   EnrollmentValidator.cs
+    |       |   UserValidator.cs
+    |       |   
+    |       \---Format
+    |               EmailValidator.cs
+    |               UrlValidator.cs
+    |               ValidationPassword.cs
+    |               
+    +---Moodle.Domain
+    |   |   Moodle.Domain.csproj
+    |   |   
+    |   +---Common
+    |   |   \---Validations
+    |   |           ValidationItem.cs
+    |   |           ValidationResult.cs
+    |   |           ValidationSeverity.cs
+    |   |           ValidationType.cs
+    |   |           
+    |   +---Entities
+    |   |       Announcement.cs
+    |   |       Course.cs
+    |   |       CourseEnrollment.cs
+    |   |       Material.cs
+    |   |       Message.cs
+    |   |       User.cs
+    |   |       
+    |   +---Enums
+    |   |       Roles.cs
+    |   |       
+    |   \---obj
+    |           Moodle.Domain.csproj.nuget.dgspec.json
+    |           Moodle.Domain.csproj.nuget.g.props
+    |           Moodle.Domain.csproj.nuget.g.targets
+    |           project.assets.json
+    |           project.nuget.cache
+    |           
+    +---Moodle.Infrastructure
+    |   |   Moodle.Infrastructure.csproj
+    |   |   
+    |   +---obj
+    |   |       Moodle.Infrastructure.csproj.nuget.dgspec.json
+    |   |       Moodle.Infrastructure.csproj.nuget.g.props
+    |   |       Moodle.Infrastructure.csproj.nuget.g.targets
+    |   |       project.assets.json
+    |   |       project.nuget.cache
+    |   |       
+    |   +---Persistence
+    |   |   |   MoodleDbContext.cs
+    |   |   |   UnitOfWork.cs
+    |   |   |   
+    |   |   \---Configuration
+    |   |           AnnouncementConfiguration.cs
+    |   |           CourseConfiguration.cs
+    |   |           EnrollmentConfiguration.cs
+    |   |           MaterialConfiguration.cs
+    |   |           MessageConfiguration.cs
+    |   |           UserConfiguration.cs
+    |   |           
+    |   \---Repositories
+    |           AnnouncementRepository.cs
+    |           CourseRepository.cs
+    |           EnrollmentRepository.cs
+    |           MaterialRepository.cs
+    |           MessageRepository.cs
+    |           Repository.cs
+    |           UserRepository.cs
+    |           
+    +---Moodle.Presentation
+    |   |   Moodle.Presentation.csproj
+    |   |   Program.cs
+    |   |   
+    |   +---Helpers
+    |   +---Menus
+    |   \---obj
+    |           Moodle.Presentation.csproj.nuget.dgspec.json
+    |           Moodle.Presentation.csproj.nuget.g.props
+    |           Moodle.Presentation.csproj.nuget.g.targets
+    |           project.assets.json
+    |           project.nuget.cache
+    |           
+    +---obj
+    |   |   Moodle.csproj.nuget.dgspec.json
+    |   |   Moodle.csproj.nuget.g.props
+    |   |   Moodle.csproj.nuget.g.targets
+    |   |   project.assets.json
+    |   |   project.nuget.cache
+    |   |   
+    |   \---Debug
+    |       \---net8.0
+    |           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+    |           |   Moodle.AssemblyInfo.cs
+    |           |   Moodle.AssemblyInfoInputs.cache
+    |           |   Moodle.assets.cache
+    |           |   Moodle.csproj.AssemblyReference.cache
+    |           |   Moodle.GeneratedMSBuildEditorConfig.editorconfig
+    |           |   Moodle.GlobalUsings.g.cs
+    |           |   
+    |           +---ref
+    |           +---refint
+    |           \---staticwebassets
+    \---Properties
+            launchSettings.json
+            

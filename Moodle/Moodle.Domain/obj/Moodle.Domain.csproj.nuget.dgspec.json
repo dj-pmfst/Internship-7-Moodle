@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\DORA\\source\\repos\\moodle\\moodle\\Moodle.Domain\\Moodle.Domain.csproj": {}
+    "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Domain\\Moodle.Domain.csproj": {}
   },
   "projects": {
-    "C:\\Users\\DORA\\source\\repos\\moodle\\moodle\\Moodle.Domain\\Moodle.Domain.csproj": {
+    "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Domain\\Moodle.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\DORA\\source\\repos\\moodle\\moodle\\Moodle.Domain\\Moodle.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Domain\\Moodle.Domain.csproj",
         "projectName": "Moodle.Domain",
-        "projectPath": "C:\\Users\\DORA\\source\\repos\\moodle\\moodle\\Moodle.Domain\\Moodle.Domain.csproj",
+        "projectPath": "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Domain\\Moodle.Domain.csproj",
         "packagesPath": "C:\\Users\\DORA\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\DORA\\source\\repos\\moodle\\moodle\\Moodle.Domain\\obj\\",
+        "outputPath": "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

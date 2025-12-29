@@ -15,5 +15,6 @@ namespace Moodle.Application.Interfaces.Repositories
         Task AddAsync(User user);
         void Update(User user);
         void Delete(User user);
+        Task<bool> EmailExistsAsync(string email, int? excludeUserId = null);
     }
 }

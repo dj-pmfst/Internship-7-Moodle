@@ -39,5 +39,17 @@ namespace Moodle.Infrastructure.Repositories
         {
             return await GetByRoleAsync(Roles.profesor);
         }
+
+        public async Task<bool> EmailExistsAsync(string email, int? excludeUserId = null)
+        {
+            if (excludeUserId.HasValue)
+            {
+                return await _dbSet
+                    .AnyAsync(u => u.Email == email && u.Id != excludeUserId.Value);
+            }
+
+            return await _dbSet
+                .AnyAsync(u => u.Email == email);
+        }
     }
 }

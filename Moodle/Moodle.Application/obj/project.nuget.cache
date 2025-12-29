@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "77fbHdJNFbA=",
+  "dgSpecHash": "mwsDBu2mgBE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\DORA\\source\\repos\\moodle\\moodle\\Moodle.Application\\Moodle.Application.csproj",
+  "projectFilePath": "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Application\\Moodle.Application.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\DORA\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512"
+    "C:\\Users\\DORA\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
+    "C:\\Users\\DORA\\.nuget\\packages\\microsoft.extensions.dependencyinjection.abstractions\\8.0.0\\microsoft.extensions.dependencyinjection.abstractions.8.0.0.nupkg.sha512"
   ],
   "logs": []
 }
