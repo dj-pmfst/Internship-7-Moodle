@@ -4,7 +4,7 @@ using ValidationResult = Moodle.Domain.Common.Validations.ValidationResult;
 
 namespace Moodle.Application.Validators.Format
 {
-    public static class EmailValidator
+    public static class ValidationPassword
     {
         private const int MinimumLength = 5;
         private const int MaximumLength = 150;
