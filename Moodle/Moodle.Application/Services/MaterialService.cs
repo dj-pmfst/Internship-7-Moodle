@@ -1,6 +1,5 @@
 ﻿using Moodle.Application.DTOs.Material;
 using Moodle.Application.Interfaces;
-using Moodle.Application.Validators.Format;
 using Moodle.Domain.Entities;
 using Moodle.Moodle.Application.Common;
 using Moodle.Moodle.Application.Validators.Format;

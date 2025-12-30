@@ -1,27 +1,55 @@
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Moodle.Application;
+using Moodle.Infrastructure;
+using Moodle.Infrastructure.Persistence;
+using Moodle.Presentation.Helpers;
+
 namespace Moodle.Presentation
 {
     public class Program
     {
-        public static void Main(string[] args)
+        private static IServiceProvider? _serviceProvider;
+        public static async Task Main(string[] args)
         {
-            var builder = WebApplication.CreateBuilder(args);
+            var host = CreateHostBuilder(args).Build;
+            _serviceProvider = host.Services;
 
-            // Add services to the container.
+            //Fix
+        }
 
-            builder.Services.AddControllers();
+        static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureServices((context, services) =>
+            {
+                services.AddInfrastructure(context.Configuration);
+                services.AddApplication();
+            });
 
-            var app = builder.Build();
+        //ADD seeeds
 
-            // Configure the HTTP request pipeline.
+        static async Task InitializeDataBaseAsync()
+        {
+            using var scope = _serviceProvider!.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<MoodleDbContext>();
 
-            app.UseHttpsRedirection();
+            await context.Database.EnsureCreatedAsync();
 
-            app.UseAuthorization();
+            await SeedDataAsync(context);
+        }
 
+        static async SeedDataAsnyc(MoodleDbContext context)
+        {
 
-            app.MapControllers();
+        }
 
-            app.Run();
+        static async Task RunApplicationAsync()
+        {
+            using var scope = _serviceProvider!.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<MoodleDbContext>();
+
+            Console.WriteLine("Pokrenuta aplikacija");
+            ConsoleHelper.Continue();
         }
     }
 }
