@@ -12,10 +12,9 @@ namespace Moodle.Presentation
         private static IServiceProvider? _serviceProvider;
         public static async Task Main(string[] args)
         {
-            var host = CreateHostBuilder(args).Build;
+            var host = CreateHostBuilder(args).Build();
             _serviceProvider = host.Services;
 
-            //Fix
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -40,7 +39,7 @@ namespace Moodle.Presentation
 
         static async SeedDataAsnyc(MoodleDbContext context)
         {
-
+            await Task.CompletedTask;
         }
 
         static async Task RunApplicationAsync()

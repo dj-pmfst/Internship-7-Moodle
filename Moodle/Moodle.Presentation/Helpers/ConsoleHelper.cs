@@ -20,5 +20,11 @@
             Console.WriteLine("\nPritisnite bilo koju tipku za nastavak...");
             Console.ReadKey();
         }
+
+        public static string ErrInput()
+        {
+            Console.Write("\nNeispravan unos. \nUnesite opet:");
+            return Console.ReadLine();
+        }
     }
 }

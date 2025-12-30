@@ -17,13 +17,19 @@
                 return false;
             }
         }
-        public static string ErrInput()
+
+        public static int ReadInt(int min = int.MinValue, int max = int.MaxValue)
         {
-            Console.Write("\nNeispravan unos. \nUnesite opet:");
-            return Console.ReadLine();
+            while (true)
+            {
+                if (int.TryParse(Console.ReadLine(), out int result) && result >= min && result <= max)
+                    return result;
+
+                ConsoleHelper.ErrInput();
+            }
         }
 
-        public static T ReadValidated<T>(string prompt, Func<string, (bool isValid, T? value, string? error)> validator)
+        public static T ReadValid<T>(string prompt, Func<string, (bool isValid, T? value, string? error)> validator)
         {
             while (true)
             {
@@ -35,7 +41,7 @@
                 if (isValid && value != null)
                     return value;
 
-                ErrInput();
+                ConsoleHelper.ErrInput();
             }
         }
 
@@ -43,7 +49,7 @@
         {
             while (string.IsNullOrWhiteSpace(password) || password.Length < 4 || password.Contains(" "))
             {
-                Console.WriteLine("Šifra ne može biti prazna ni kraća od 4 znaka.");
+                Console.WriteLine("Šifra ne može biti prazna, ni kraća od 4 znaka.");
                 Console.Write("Unesite šifru: ");
                 password = Console.ReadLine();
             }
@@ -54,9 +60,46 @@
         {
             while (!DateTime.TryParse(dateInput, out DateTime date) || date.Year > 2026)
             {
-                dateInput = ErrInput();
+                dateInput = ConsoleHelper.ErrInput(); ;
             }
             return DateTime.Parse(dateInput);
+        }
+
+        public static string ReadEmail(string prompt)
+        {
+            while (true)
+            {
+                Console.Write(prompt);
+                var input = Console.ReadLine()?.Trim() ?? string.Empty;
+
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    ConsoleHelper.ErrInput();
+                }
+
+                if (!input.Contains("@") || !input.Contains("."))
+                {
+                    ConsoleHelper.ErrInput();
+                }
+
+                return input;
+            }
+        }
+
+        public static string StringValid(string prompt)
+        {
+            Console.WriteLine(prompt);
+            while (true)
+            {
+                var input = Console.ReadLine()?.Trim();
+
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    ConsoleHelper.ErrInput();
+                }
+
+                return input;
+            }
         }
     }
 }
