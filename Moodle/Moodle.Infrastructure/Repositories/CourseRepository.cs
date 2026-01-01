@@ -21,6 +21,7 @@ namespace Moodle.Infrastructure.Repositories
         {
             return await _dbSet
                 .Where(c => c.ProfessorId == professorId)
+                .Include(c => c.Professor)
                 .OrderBy(c => c.Name)
                 .ToListAsync();
         }

@@ -117,5 +117,19 @@ namespace Moodle.Application.Services
                 Professor = course.Professor?.Name ?? "Unknown"
             };
         }
+
+        public async Task<IEnumerable<UserDTO>> GetCourseStudentsAsync(int courseId)
+        {
+            var students = await _unitOfWork.Courses.GetCourseStudentsAsync(courseId);
+
+            return students.Select(s => new UserDTO
+            {
+                Id = s.Id,
+                Name = s.Name,
+                Email = s.Email,
+                Role = s.Role,
+                IsActive = s.IsActive
+            });
+        }
     }
 }
