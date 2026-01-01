@@ -4,12 +4,12 @@ using Moodle.Presentation.Helpers;
 
 namespace Moodle.Presentation.Menus
 {
-    public class MainMenu
+    public class UserMenu
     {
         private readonly LoginResponse _currentUser;
         private readonly IServiceProvider _serviceProvider;
 
-        public MainMenu(LoginResponse currentUser, IServiceProvider serviceProvider)
+        public UserMenu(LoginResponse currentUser, IServiceProvider serviceProvider)
         {
             _currentUser = currentUser;
             _serviceProvider = serviceProvider;
@@ -19,22 +19,17 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                var options = new List<string> { "Kolegiji", "Razgovori" };
+                var options = new List<string> { "Obavijesti", "Materijali" };
 
                 int n = options.Count;
 
                 if (_currentUser.Role == Roles.profesor)
                 {
-                    options.Add("Upravljanje kolegijima");
+                    options.Add("Student");
                     n++;
                 }
-                else if (_currentUser.Role == Roles.admin)
-                {
-                    options.Add("Korisnici");
-                    n ++;
-                }
 
-                MenuHelper.MenuGenerator(n,"Glavni izbornik", options.ToArray());
+                MenuHelper.MenuGenerator(n, "Kolegij", options.ToArray());
 
                 var choice = MenuHelper.GetMenuChoice(n);
 
@@ -46,5 +41,5 @@ namespace Moodle.Presentation.Menus
                 ConsoleHelper.Continue();
             }
         }
-    }
+    }   
 }
