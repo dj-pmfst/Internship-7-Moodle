@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Moodle.Infrastructure.Migrations
 {
     [DbContext(typeof(MoodleDbContext))]
-    [Migration("20260102154608_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260102202850_CascadeDeleteMessages")]
+    partial class CascadeDeleteMessages
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -39,7 +39,7 @@ namespace Moodle.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("ProfessorId")
+                    b.Property<int?>("ProfessorId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Text")
@@ -84,7 +84,7 @@ namespace Moodle.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("character varying(150)");
 
-                    b.Property<int>("ProfessorId")
+                    b.Property<int?>("ProfessorId")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -98,7 +98,7 @@ namespace Moodle.Infrastructure.Migrations
 
             modelBuilder.Entity("Moodle.Domain.Entities.CourseEnrollment", b =>
                 {
-                    b.Property<int>("StudentId")
+                    b.Property<int?>("StudentId")
                         .HasColumnType("integer");
 
                     b.Property<int>("CourseId")
@@ -149,13 +149,13 @@ namespace Moodle.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("ReceiverId")
+                    b.Property<int?>("ReceiverId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("RecievedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("SenderId")
+                    b.Property<int?>("SenderId")
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("SentAt")
@@ -230,8 +230,7 @@ namespace Moodle.Infrastructure.Migrations
                     b.HasOne("Moodle.Domain.Entities.User", "Professor")
                         .WithMany("Announcements")
                         .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Course");
 
@@ -243,8 +242,7 @@ namespace Moodle.Infrastructure.Migrations
                     b.HasOne("Moodle.Domain.Entities.User", "Professor")
                         .WithMany("TaughtCourses")
                         .HasForeignKey("ProfessorId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Professor");
                 });
@@ -284,14 +282,12 @@ namespace Moodle.Infrastructure.Migrations
                     b.HasOne("Moodle.Domain.Entities.User", "Receiver")
                         .WithMany("ReceivedMessages")
                         .HasForeignKey("ReceiverId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Moodle.Domain.Entities.User", "Sender")
                         .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Receiver");
 

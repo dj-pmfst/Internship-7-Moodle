@@ -3,7 +3,6 @@ using Moodle.Application.DTOs.User;
 using Moodle.Application.Interfaces;
 using Moodle.Domain.Entities;
 using Moodle.Moodle.Application.Common;
-using Moodle.Moodle.Application.DTOs.Message;
 
 namespace Moodle.Application.Services
 {

@@ -13,7 +13,6 @@
             else
             {
                 Console.WriteLine("Otkazano {0}", type);
-                ConsoleHelper.Continue();
                 return false;
             }
         }
@@ -22,7 +21,9 @@
         {
             while (true)
             {
-                if (int.TryParse(Console.ReadLine(), out int result) && result >= min && result <= max)
+                var input = Console.ReadLine();
+
+                if (int.TryParse(input, out int result) && result >= min && result <= max)
                     return result;
 
                 ConsoleHelper.ErrInput();
@@ -47,6 +48,8 @@
 
         public static string ReadPassword(string password)
         {
+            Console.Write("Unesite šifru: ");
+            password = Console.ReadLine();
             while (string.IsNullOrWhiteSpace(password) || password.Length < 4 || password.Contains(" "))
             {
                 Console.WriteLine("Šifra ne može biti prazna, ni kraća od 4 znaka.");
@@ -88,7 +91,7 @@
 
         public static string StringValid(string prompt)
         {
-            Console.WriteLine(prompt);
+            Console.Write(prompt);
             while (true)
             {
                 var input = Console.ReadLine()?.Trim();

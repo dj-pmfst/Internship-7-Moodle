@@ -9,20 +9,23 @@
             {
                 Console.WriteLine($"{i+1} - {text[i]}");
             }
-            if (title != "Glavni izbornik" || title != "Moodle")
+            if (title != "Glavni izbornik" && title != "Moodle")
             {
-                Console.WriteLine($"{n+1} - Povratak na prethodni izbornik", n+1);
+                Console.WriteLine($"{n+1} - Povratak na prethodni izbornik");
             }
-            else if (title == "Moodle")
+            if (title == "Glavni izbornik")
             {
-                Console.WriteLine($"{0} - Odjava", n+1);
+                Console.WriteLine($"{n+1} - Odjava");
             }
-            Console.WriteLine("0 - Izlazak iz aplikacije");
+
+            Console.WriteLine("0 - Izlazak iz aplikacije");       
             Console.WriteLine();
         }
 
         public static int GetMenuChoice(int n)
         {
+            Console.WriteLine($"n: {n}");
+            Console.Write("\nOdabir: ");
             return InputHelper.ReadInt(0, n);
         }
     }

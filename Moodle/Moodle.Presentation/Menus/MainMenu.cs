@@ -36,12 +36,13 @@ namespace Moodle.Presentation.Menus
 
                 MenuHelper.MenuGenerator(n,"Glavni izbornik", options.ToArray());
 
-                var choice = MenuHelper.GetMenuChoice(n);
+                var choice = MenuHelper.GetMenuChoice(n+1);
 
                 switch (choice)
                 {
                     case 0:
-                        return;
+                        Environment.Exit(0);
+                        break;
                     case 1:
                         var userMenu = new CourseSelectScreen(_currentUser, _serviceProvider, options[0]);
                         await userMenu.ShowAsync();
@@ -56,16 +57,16 @@ namespace Moodle.Presentation.Menus
                             var courseMenu = new CourseSelectScreen(_currentUser, _serviceProvider, options[2]);
                             await courseMenu.ShowAsync();
                         }
-                        break;
-                    case 4:
-                        if (_currentUser.Role == Roles.admin)
+                        else if (_currentUser.Role == Roles.admin)
                         {
+                            Console.WriteLine("da");
                             var menu = new AdminMenu(_currentUser, _serviceProvider);
                             await menu.ShowAsync();
                         }
                         break;
+                    case 4:
+                        return;
                 }
-
                 ConsoleHelper.Continue();
             }
         }

@@ -39,7 +39,7 @@ namespace Moodle.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Description = table.Column<string>(type: "character varying(1500)", maxLength: 1500, nullable: false),
-                    ProfessorId = table.Column<int>(type: "integer", nullable: false),
+                    ProfessorId = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>
@@ -60,8 +60,8 @@ namespace Moodle.Infrastructure.Migrations
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Text = table.Column<string>(type: "character varying(1500)", maxLength: 1500, nullable: false),
-                    SenderId = table.Column<int>(type: "integer", nullable: false),
-                    ReceiverId = table.Column<int>(type: "integer", nullable: false),
+                    SenderId = table.Column<int>(type: "integer", nullable: true),
+                    ReceiverId = table.Column<int>(type: "integer", nullable: true),
                     SentAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     RecievedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -91,7 +91,7 @@ namespace Moodle.Infrastructure.Migrations
                     Title = table.Column<string>(type: "character varying(150)", maxLength: 150, nullable: false),
                     Text = table.Column<string>(type: "character varying(1500)", maxLength: 1500, nullable: false),
                     CourseId = table.Column<int>(type: "integer", nullable: false),
-                    ProfessorId = table.Column<int>(type: "integer", nullable: false),
+                    ProfessorId = table.Column<int>(type: "integer", nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
                 constraints: table =>

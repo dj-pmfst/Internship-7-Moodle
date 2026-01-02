@@ -23,7 +23,7 @@
 
         public static string ErrInput()
         {
-            Console.Write("\nNeispravan unos. \nUnesite opet:");
+            Console.Write("\nNeispravan unos. \nUnesite opet: ");
             return Console.ReadLine();
         }
     }

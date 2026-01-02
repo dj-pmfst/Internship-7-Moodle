@@ -29,7 +29,6 @@ namespace Moodle.Presentation.Menus
             if (!courseList.Any())
             {
                 Console.WriteLine("Nema upisanih kolegija.");
-                ConsoleHelper.Continue();
                 return;
             }
 
@@ -39,6 +38,7 @@ namespace Moodle.Presentation.Menus
                 courseList.Select(c => c.Name).ToArray()
             );
 
+            Console.Write("\nOdabir: ");
             int choice = MenuHelper.GetMenuChoice(courseList.Count);
 
             var selectedCourse = courseList[choice - 1];

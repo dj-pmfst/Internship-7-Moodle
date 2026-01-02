@@ -1,4 +1,4 @@
-﻿namespace Moodle.Moodle.Application.DTOs.Message
+﻿namespace Moodle.Application.DTOs.Message
 {
     public class SendMessageRequest
     {

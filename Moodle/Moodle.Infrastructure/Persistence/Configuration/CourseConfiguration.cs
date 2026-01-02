@@ -8,6 +8,7 @@ namespace Moodle.Infrastructure.Persistence.Configuration
     {
         private const int maxLengthName = 150;
         private const int maxLengthDescription = 1500;
+
         public void Configure(EntityTypeBuilder<Course> builder) 
         {
             builder.HasKey(c  => c.Id);
@@ -18,7 +19,7 @@ namespace Moodle.Infrastructure.Persistence.Configuration
             builder.HasOne(c => c.Professor)
                 .WithMany(u => u.TaughtCourses)
                 .HasForeignKey(c => c.ProfessorId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(c => c.Enrollments)
                 .WithOne(ce => ce.Course)

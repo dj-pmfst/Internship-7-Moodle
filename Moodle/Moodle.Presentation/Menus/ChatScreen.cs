@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Moodle.Application.DTOs.Auth;
+using Moodle.Application.DTOs.Message;
 using Moodle.Application.Services;
-using Moodle.Moodle.Application.DTOs.Message;
 using Moodle.Presentation.Helpers;
 
 namespace Moodle.Presentation.Menus
@@ -71,11 +71,14 @@ namespace Moodle.Presentation.Menus
                     }
                 }
 
-                var options = new List<string> { "Pošalji poruku", "Osvježi", "Nazad" };
+                var options = new List<string> { "Pošalji poruku", "Osvježi", "Povratak" };
 
-                MenuHelper.MenuGenerator(3, "\n", options.ToArray());
+                for (int i = 0; i < 3; i++)
+                {
+                    Console.WriteLine($"{i + 1} - {options[i]}");
+                }
 
-                var choice = InputHelper.ReadInt(0,options.Count());
+                var choice = MenuHelper.GetMenuChoice(options.Count());
 
                 switch (choice)
                 {
@@ -85,14 +88,13 @@ namespace Moodle.Presentation.Menus
                     case 2:
                         break;
                     case 3:
-                        return; 
+                        return;
                 }
             }
         }
 
         private async Task SendMessageAsync(MessageService messageService)
         {
-            Console.WriteLine();
             var text = InputHelper.StringValid("Unesi poruku: ");
 
             var request = new SendMessageRequest
@@ -115,7 +117,6 @@ namespace Moodle.Presentation.Menus
                 {
                     Console.WriteLine(error);
                 }
-                ConsoleHelper.Continue();
             }
         }
     }

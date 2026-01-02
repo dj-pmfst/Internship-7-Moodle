@@ -17,7 +17,7 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                MenuHelper.MenuGenerator(2, "Moodle",
+                MenuHelper.MenuGenerator(1, "Moodle",
                     [
                         "Prijava",
                         "Registracija"
@@ -107,7 +107,6 @@ namespace Moodle.Presentation.Menus
                 if (captcha != captchaInput)
                 {
                     ConsoleHelper.ErrInput();
-                    ConsoleHelper.Continue();
                     return;
                 }
                 else if (captcha == captchaInput)

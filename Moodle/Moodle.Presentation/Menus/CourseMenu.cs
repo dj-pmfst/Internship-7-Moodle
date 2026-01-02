@@ -31,12 +31,14 @@ namespace Moodle.Presentation.Menus
 
                 MenuHelper.MenuGenerator(n, "Upravljanje kolegijima", options.ToArray());
 
+                Console.Write("\nOdabir: ");
                 var choice = MenuHelper.GetMenuChoice(n);
 
                 switch (choice)
                 {
                     case 0:
-                        return;
+                        Environment.Exit(0);
+                        break;
                     case 1:
                         await AddStudentAsync();
                         break;
@@ -46,6 +48,8 @@ namespace Moodle.Presentation.Menus
                     case 3:
                         await AddMaterialASync();
                         break;
+                    case 4:
+                        return;
                 }
 
                 ConsoleHelper.Continue();
@@ -66,7 +70,6 @@ namespace Moodle.Presentation.Menus
             if (!studentList.Any())
             {
                 Console.WriteLine("Nema studenata"); 
-                ConsoleHelper.Continue();
                 return;
             }
 
@@ -95,8 +98,6 @@ namespace Moodle.Presentation.Menus
             {
                 result.ValidationResult.GetErrorMessages().FirstOrDefault();
             }
-
-            ConsoleHelper.Continue();
         }
 
         private async Task AddAnnouncementAsync()
@@ -130,8 +131,6 @@ namespace Moodle.Presentation.Menus
                     Console.WriteLine(error);
                 }
             }
-
-            ConsoleHelper.Continue();
         }
 
         private async Task AddMaterialASync()
@@ -164,8 +163,6 @@ namespace Moodle.Presentation.Menus
                     Console.WriteLine(error);
                 }
             }
-
-            ConsoleHelper.Continue();
         }
     }
 }

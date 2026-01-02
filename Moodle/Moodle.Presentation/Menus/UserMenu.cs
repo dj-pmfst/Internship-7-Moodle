@@ -25,22 +25,23 @@ namespace Moodle.Presentation.Menus
             {
                 var options = new List<string> { "Obavijesti", "Materijali" };
 
-                int n = options.Count;
-
                 if (_currentUser.Role == Roles.profesor)
                 {
                     options.Add("Studenti");
-                    n++;
                 }
 
-                MenuHelper.MenuGenerator(n, "Kolegij", options.ToArray());
+                int n = options.Count;
 
+                MenuHelper.MenuGenerator(n, "Kolegij", options.ToArray());
+                n = n + 1;
+                Console.WriteLine($"dhsjfkil {n}");
                 var choice = MenuHelper.GetMenuChoice(n);
 
                 switch (choice)
                 {
                     case 0:
-                        return;
+                        Environment.Exit(0);
+                        break;
                     case 1:
                         await GetAnnouncementsAsync();
                         break;
@@ -51,10 +52,15 @@ namespace Moodle.Presentation.Menus
                         if (_currentUser.Role == Roles.profesor)
                         {
                             await GetStudentsAsync();
-                        }                     
-                        break;
+                            break;
+                        }
+                        else
+                        {
+                            return;
+                        }   
+                     case 4:
+                        return;
                 }
-
                 ConsoleHelper.Continue();
             }
         }
@@ -83,8 +89,6 @@ namespace Moodle.Presentation.Menus
                     Console.WriteLine(new string('-', 50));
                 }
             }
-
-            ConsoleHelper.Continue();
         }
 
         private async Task GetMaterialsAsync()
@@ -106,13 +110,11 @@ namespace Moodle.Presentation.Menus
                 foreach (var material in materials)
                 {
                     Console.WriteLine($"\n[{material.FormattedDate}]");
-                    Console.WriteLine($"Name: {material.Name}");
+                    Console.WriteLine($"Naziv: {material.Name}");
                     Console.WriteLine($"URL: {material.Url}");
                     Console.WriteLine(new string('-', 50));
                 }
             }
-
-            ConsoleHelper.Continue();
         }
 
         private async Task GetStudentsAsync()
@@ -136,8 +138,6 @@ namespace Moodle.Presentation.Menus
                     Console.WriteLine($"-({student.Name}) ({student.Email})");
                 }
             }
-
-            ConsoleHelper.Continue();
         }
     }   
 }

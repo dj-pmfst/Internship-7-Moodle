@@ -24,18 +24,21 @@ namespace Moodle.Presentation.Menus
 
             MenuHelper.MenuGenerator(n, "Razgovori", options.ToArray());
 
-            var choice = MenuHelper.GetMenuChoice(n);
+            var choice = MenuHelper.GetMenuChoice(n+1);
 
             switch (choice)
             {
                 case 0:
-                    return;
+                    Environment.Exit(0);
+                    break;
                 case 1:
                     await NewMessageAsync();
                     break;
                 case 2:
                     await MyChatsAsync();
                     break;
+                case 3:
+                    return;
             }
 
             ConsoleHelper.Continue();
@@ -54,18 +57,27 @@ namespace Moodle.Presentation.Menus
             if (!userList.Any())
             {
                 Console.WriteLine("Nema novih korisnika");
-                ConsoleHelper.Continue();
                 return;
             }
 
-            Console.WriteLine("Available users:");
+            Console.WriteLine("Dostupni korisinici:");
             for (int i = 0; i < userList.Count; i++)
             {
-                Console.WriteLine($"{userList[i].Id}. {userList[i].Name} ({userList[i].Role})");
+                Console.WriteLine($"{userList[i].Id} - {userList[i].Name} ({userList[i].Role})");
             }
+            var validIds = userList.Select(u => u.Id).ToList();
+            int userId;
 
-            Console.WriteLine("\n Unesite ID korisnika kojem želite poslati poruku: ");
-            var userId = InputHelper.ReadInt(1, userList.Count());
+            while (true)
+            {
+                Console.Write("\nUnesite ID korisnika kojem želite poslati poruku: ");
+                userId = InputHelper.ReadInt();
+
+                if (validIds.Contains(userId))
+                    break;
+
+                Console.WriteLine("Nevažeći ID. Pokušajte ponovno.");
+            }
 
             var chatScreen = new ChatScreen(_currentUser, userId, _serviceProvider);
             await chatScreen.ShowAsync();
@@ -84,7 +96,6 @@ namespace Moodle.Presentation.Menus
             if (!partnerList.Any())
             {
                 Console.WriteLine("Nema razgovora");
-                ConsoleHelper.Continue();
                 return;
             }
 
@@ -93,7 +104,7 @@ namespace Moodle.Presentation.Menus
                 Console.WriteLine($"{i + 1}. {partnerList[i].Name} ({partnerList[i].Role})");
             }
 
-            Console.WriteLine("\n Unesite ID razgovora: ");
+            Console.Write("\nUnesite ID razgovora: ");
             var choice = InputHelper.ReadInt(1, partnerList.Count());
             var selectedUser = partnerList[choice - 1];
 

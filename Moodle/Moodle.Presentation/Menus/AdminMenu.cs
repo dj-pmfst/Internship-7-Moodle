@@ -25,6 +25,7 @@ namespace Moodle.Presentation.Menus
 
             MenuHelper.MenuGenerator(n, "Upravljanje korisnicima", options.ToArray());
 
+            Console.Write("\nOdabir: ");
             var choice = MenuHelper.GetMenuChoice(n);
 
             switch (choice)
@@ -53,19 +54,32 @@ namespace Moodle.Presentation.Menus
             ConsoleHelper.Title("Brisanje korisnika");
 
             var students = await userService.GetAllStudentsAsync();
-            foreach (var student in students)
-            {
-                Console.WriteLine($"{student.Id}. {student.Name} - {student.Email}");
-            }
-
             var professors = await userService.GetAllProfessorsAsync();
-            foreach (var prof in professors)
+            var allUsers = students.Concat(professors).ToList();
+
+            if (!allUsers.Any())
             {
-                Console.WriteLine($"{prof.Id}. {prof.Name} - {prof.Email}");
+                Console.WriteLine("Nema korisnika");
+                return;
             }
 
-            Console.WriteLine("\n Unesite ID korisnika koge želite izbrisati: ");
-            var userId = InputHelper.ReadInt(1, students.Count()+professors.Count());
+            foreach (var user in allUsers)
+            {
+                Console.WriteLine($"{user.Id} - {user.Name} - {user.Email}");
+            }              
+
+            int userId;
+            var validIds = allUsers.Select(u => u.Id).ToHashSet();
+
+            Console.Write("\nUnesite ID korisnika kojeg želite izbrisati: ");
+            while (true)
+            {               
+                userId = InputHelper.ReadInt(); 
+                if (validIds.Contains(userId))
+                    break;
+
+                ConsoleHelper.ErrInput();
+            }
 
             if (InputHelper.Confirmation(userId, "brisanje"))
             {
@@ -80,9 +94,6 @@ namespace Moodle.Presentation.Menus
                     result.ValidationResult.GetErrorMessages().FirstOrDefault();
                 }
             }
-
-            ConsoleHelper.Continue();
-
         }
 
         private async Task EditEmailAsync()
@@ -93,20 +104,35 @@ namespace Moodle.Presentation.Menus
             ConsoleHelper.Title("Izmjena emiala");
 
             var students = await userService.GetAllStudentsAsync();
-            foreach (var student in students)
-            {
-                Console.WriteLine($"{student.Id}. {student.Name} - {student.Email}");
-            }
-
             var professors = await userService.GetAllProfessorsAsync();
-            foreach (var prof in professors)
+            var allUsers = students.Concat(professors).ToList();
+
+            if (!allUsers.Any())
             {
-                Console.WriteLine($"{prof.Id}. {prof.Name} - {prof.Email}");
+                Console.WriteLine("Nema korisnika za uređivanje.");
+                return;
             }
 
-            Console.WriteLine("\n Unesite ID korisnika koge želite izbrisati: ");
-            var userId = InputHelper.ReadInt(1, students.Count() + professors.Count());
-            var newEmail = InputHelper.ReadEmail("Enter new email: ");
+            foreach (var user in allUsers)
+            {
+                Console.WriteLine($"{user.Id} - {user.Name} - {user.Email}");
+            }
+
+            int userId;
+            var validIds = allUsers.Select(u => u.Id).ToHashSet();
+
+            Console.Write("\nUnesite ID korisnika kojeg želite urediti: ");
+
+            while (true)
+            {
+                userId = InputHelper.ReadInt();
+                if (validIds.Contains(userId))
+                    break;
+
+                ConsoleHelper.ErrInput();
+            }
+
+            var newEmail = InputHelper.ReadEmail("Unesite novi email: ");
 
             var request = new UpdateUserEmailRequest
             {
@@ -130,8 +156,6 @@ namespace Moodle.Presentation.Menus
                     }
                 }
             }
-
-            ConsoleHelper.Continue();
         }
 
         private async Task RoleChangeAsync()
@@ -142,20 +166,29 @@ namespace Moodle.Presentation.Menus
             ConsoleHelper.Title("Izmjena uloge");
 
             var students = await userService.GetAllStudentsAsync();
-            foreach (var student in students)
-            {
-                Console.WriteLine($"student - {student.Id}. {student.Name} - {student.Email}");
-            }
-
             var professors = await userService.GetAllProfessorsAsync();
-            foreach (var prof in professors)
+            var allUsers = students.Concat(professors).ToList();
+
+            if (!allUsers.Any())
             {
-                Console.WriteLine($"profesor - {prof.Id}. {prof.Name} - {prof.Email}");
+                Console.WriteLine("Nema korisnika");
+                return;
             }
 
+            foreach (var user in allUsers)
+                Console.WriteLine($"{user.Id} - {user.Name} - {user.Email} ({user.Role})");
 
-            Console.WriteLine("\n Unesite ID korisnika koge želite izbrisati: ");
-            var userId = InputHelper.ReadInt(1, students.Count() + professors.Count());
+            int userId;
+            var validIds = allUsers.Select(u => u.Id).ToHashSet();
+            while (true)
+            {
+                Console.Write("\nUnesite ID korisnika kojem želite izmjeniti ulogu: ");
+                userId = InputHelper.ReadInt();
+                if (validIds.Contains(userId))
+                    break;
+
+                ConsoleHelper.ErrInput();
+            }
 
             if (InputHelper.Confirmation(userId, "uređivanje"))
             {
@@ -171,8 +204,6 @@ namespace Moodle.Presentation.Menus
                    result.ValidationResult.GetErrorMessages().FirstOrDefault();
                 }
             }
-
-            ConsoleHelper.Continue();
         }
     }
 }
