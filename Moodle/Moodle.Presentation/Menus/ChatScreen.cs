@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Moodle.Application.DTOs.Auth;
-using Moodle.Application.DTOs.Message;
 using Moodle.Application.Services;
 using Moodle.Moodle.Application.DTOs.Message;
 using Moodle.Presentation.Helpers;

@@ -7,11 +7,11 @@
             ConsoleHelper.Title(title);
             for (int i = 0; i < n; i++)
             {
-                Console.WriteLine($"{0} - {1}", i, text);
+                Console.WriteLine($"{i+1} - {text[i]}");
             }
-            if (title != "Glavni izbornik")
+            if (title != "Glavni izbornik" || title != "Moodle")
             {
-                Console.WriteLine($"{0} - Povratak na prethodni izbornik", n+1);
+                Console.WriteLine($"{n+1} - Povratak na prethodni izbornik", n+1);
             }
             else if (title == "Moodle")
             {

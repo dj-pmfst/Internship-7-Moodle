@@ -97,7 +97,7 @@ namespace Moodle.Presentation.Menus
             var materials = await materialsService.GetByCourseAsync(_courseId);
             var materialList = materials.ToList();
 
-            if (!materials.Any())
+            if (!materialList.Any())
             {
                 Console.WriteLine("Nema materijala.");
             }

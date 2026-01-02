@@ -127,11 +127,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Application\\Moodle.Application.csproj",
+      "projectUniqueName": "C:\\Users\\DORA\\source\\repos\\moodle\\Moodle\\Moodle.Application\\Moodle.Application.csproj",
       "projectName": "Moodle.Application",
-      "projectPath": "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Application\\Moodle.Application.csproj",
+      "projectPath": "C:\\Users\\DORA\\source\\repos\\moodle\\Moodle\\Moodle.Application\\Moodle.Application.csproj",
       "packagesPath": "C:\\Users\\DORA\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Application\\obj\\",
+      "outputPath": "C:\\Users\\DORA\\source\\repos\\moodle\\Moodle\\Moodle.Application\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -152,8 +152,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Domain\\Moodle.Domain.csproj": {
-              "projectPath": "C:\\Users\\DORA\\source\\repos\\Moodle\\Moodle\\Moodle.Domain\\Moodle.Domain.csproj"
+            "C:\\Users\\DORA\\source\\repos\\moodle\\Moodle\\Moodle.Domain\\Moodle.Domain.csproj": {
+              "projectPath": "C:\\Users\\DORA\\source\\repos\\moodle\\Moodle\\Moodle.Domain\\Moodle.Domain.csproj"
             }
           }
         }

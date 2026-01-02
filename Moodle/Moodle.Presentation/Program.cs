@@ -1,54 +1,62 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Moodle.Application;
+using Moodle.Application.Services;
 using Moodle.Infrastructure;
 using Moodle.Infrastructure.Persistence;
-using Moodle.Presentation.Helpers;
+using Moodle.Presentation.Menus;
 
 namespace Moodle.Presentation
 {
     public class Program
     {
         private static IServiceProvider? _serviceProvider;
+
         public static async Task Main(string[] args)
         {
             var host = CreateHostBuilder(args).Build();
             _serviceProvider = host.Services;
 
+            await InitializeDatabaseAsync();
+            await RunApplicationAsync();
         }
 
         static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-            .ConfigureServices((context, services) =>
-            {
-                services.AddInfrastructure(context.Configuration);
-                services.AddApplication();
-            });
+                .ConfigureServices((context, services) =>  
+                {
+                    services.AddInfrastructure(context.Configuration);
+                    services.AddApplication();
+                });
 
-        //ADD seeeds
-
-        static async Task InitializeDataBaseAsync()
+        static async Task InitializeDatabaseAsync()
         {
             using var scope = _serviceProvider!.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<MoodleDbContext>();
 
             await context.Database.EnsureCreatedAsync();
-
-            await SeedDataAsync(context);
-        }
-
-        static async SeedDataAsnyc(MoodleDbContext context)
-        {
-            await Task.CompletedTask;
+            await DataSeed.SeedAsync(context);
         }
 
         static async Task RunApplicationAsync()
         {
-            using var scope = _serviceProvider!.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<MoodleDbContext>();
+            while (true)
+            {
+                using var scope = _serviceProvider!.CreateScope();
+                var authService = scope.ServiceProvider.GetRequiredService<AuthenticationService>();
 
-            Console.WriteLine("Pokrenuta aplikacija");
-            ConsoleHelper.Continue();
+                var authMenu = new AuthenticationMenu(authService);
+                var currentUser = await authMenu.ShowAsync();
+
+                if (currentUser == null)
+                {
+                    Console.WriteLine("Izlazak iz aplikacije");
+                    return;
+                }
+
+                var mainMenu = new MainMenu(currentUser, _serviceProvider);
+                await mainMenu.ShowAsync();
+            }
         }
     }
 }

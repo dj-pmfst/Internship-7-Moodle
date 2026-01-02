@@ -38,9 +38,32 @@ namespace Moodle.Presentation.Menus
 
                 var choice = MenuHelper.GetMenuChoice(n);
 
-                if (choice == n)
+                switch (choice)
                 {
-                    return;
+                    case 0:
+                        return;
+                    case 1:
+                        var userMenu = new CourseSelectScreen(_currentUser, _serviceProvider, options[0]);
+                        await userMenu.ShowAsync();
+                        break;
+                    case 2:
+                        var chatMenu = new MessageMenu(_currentUser, _serviceProvider);
+                        await chatMenu.ShowAsync();
+                        break;
+                    case 3:
+                        if (_currentUser.Role == Roles.profesor)
+                        {
+                            var courseMenu = new CourseSelectScreen(_currentUser, _serviceProvider, options[2]);
+                            await courseMenu.ShowAsync();
+                        }
+                        break;
+                    case 4:
+                        if (_currentUser.Role == Roles.admin)
+                        {
+                            var menu = new AdminMenu(_currentUser, _serviceProvider);
+                            await menu.ShowAsync();
+                        }
+                        break;
                 }
 
                 ConsoleHelper.Continue();
