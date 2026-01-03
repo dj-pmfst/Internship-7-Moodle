@@ -68,6 +68,12 @@ namespace Moodle.Presentation.Menus
             if (student == null) 
                 return;
 
+            if (!InputHelper.Confirmation(student.Id, "dodati studenta"))
+            {
+                Console.WriteLine("Otkazano.");
+                return;
+            }
+
             var result = await courseService.EnrollStudentAsync(new EnrollStudentRequest
             {
                 CourseId = _courseId,
@@ -86,6 +92,12 @@ namespace Moodle.Presentation.Menus
 
             var title = InputHelper.StringValid("Naslov: ");
             var text = InputHelper.StringValid("Tekst: ");
+
+            if (!InputHelper.Confirmation(0, "dodati obavijest"))
+            {
+                Console.WriteLine("Otkazano.");
+                return;
+            }
 
             var result = await announcementService.CreateAnnouncementAsync(new CreateAnnouncementRequest
             {
@@ -107,6 +119,12 @@ namespace Moodle.Presentation.Menus
 
             var name = InputHelper.StringValid("Naziv: ");
             var url = InputHelper.StringValid("URL: ");
+
+            if (!InputHelper.Confirmation(0, "dodati materijal"))
+            {
+                Console.WriteLine("Otkazano.");
+                return;
+            }
 
             var result = await materialService.AddMaterialAsync(new AddMaterialRequest
             {

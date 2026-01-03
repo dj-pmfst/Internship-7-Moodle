@@ -4,7 +4,12 @@
     {
         public static bool Confirmation(int id, string type)
         {
-            Console.Write($"\nJeste li sigurni da želite {type} {id}? (y/n): ");
+            if (id == 0)
+            {
+                Console.Write($"\nJeste li sigurni da želite {type}? (y/n): ");
+            }
+            else
+                Console.Write($"\nJeste li sigurni da želite {type} {id}? (y/n): ");
             var message = Console.ReadLine()?.ToLower();
             return message == "y" || message == "yes" || message == "da";
         }

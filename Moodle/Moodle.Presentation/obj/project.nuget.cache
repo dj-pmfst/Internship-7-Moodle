@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "RtsztFY/0mA=",
+  "dgSpecHash": "phReAfcr5X8=",
   "success": true,
-  "projectFilePath": "C:\\Users\\DORA\\source\\repos\\moodle\\Moodle\\Moodle.Presentation\\Moodle.Presentation.csproj",
+  "projectFilePath": "C:\\Users\\DORA\\source\\repos\\moodle\\moodle\\Moodle.Presentation\\Moodle.Presentation.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\DORA\\.nuget\\packages\\bcrypt.net-next\\4.0.3\\bcrypt.net-next.4.0.3.nupkg.sha512",
     "C:\\Users\\DORA\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
