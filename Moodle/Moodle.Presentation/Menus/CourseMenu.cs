@@ -90,8 +90,6 @@ namespace Moodle.Presentation.Menus
                 studentId = InputHelper.ReadInt();
                 if (validIds.Contains(studentId))
                     break;
-
-                ConsoleHelper.ErrInput();
             }
 
             var request = new EnrollStudentRequest

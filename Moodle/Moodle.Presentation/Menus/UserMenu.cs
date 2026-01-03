@@ -21,6 +21,10 @@ namespace Moodle.Presentation.Menus
 
         public async Task ShowAsync()
         {
+            using var scope = _serviceProvider.CreateScope();
+            var courseService = scope.ServiceProvider.GetRequiredService<CourseService>();
+            var courseName = await courseService.GetCourseNameAsync(_courseId) ?? "Nepoznat kolegij";
+
             while (true)
             {
                 var options = new List<string> { "Obavijesti", "Materijali" };
@@ -32,9 +36,8 @@ namespace Moodle.Presentation.Menus
 
                 int n = options.Count;
 
-                MenuHelper.MenuGenerator(n, $"Kolegij '{_courseId}'", options.ToArray());
+                MenuHelper.MenuGenerator(n, $"Kolegij '{courseName}'", options.ToArray());
                 n = n + 1;
-                Console.WriteLine($"dhsjfkil {n}");
                 var choice = MenuHelper.GetMenuChoice(n);
 
                 switch (choice)

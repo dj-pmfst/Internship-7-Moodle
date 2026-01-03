@@ -50,19 +50,34 @@ namespace Moodle.Application.Services
 
         public async Task<IEnumerable<MessageDTO>> GetConversationAsync(int userId1, int userId2, int currentUserId)
         {
-            var messages = await _unitOfWork.Messages.GetConversationAsync(userId1, userId2);
+            var messages = await _unitOfWork.Messages.GetConversationMessagesAsync(userId1, userId2);
 
-            return messages.Select(m => new MessageDTO
+            var otherUserId = userId1 == currentUserId ? userId2 : userId1;
+            var otherUser = await _unitOfWork.Users.GetByIdIncludingDeletedAsync(otherUserId);
+            bool isOtherUserDeleted = (otherUser == null || otherUser.IsDeleted);
+
+            var result = new List<MessageDTO>();
+
+            foreach (var message in messages)
             {
-                Id = m.Id,
-                Text = m.Sender == null
-                    ? "[Izbrisana poruka]"
-                    : m.Text,
-                SenderName = m.Sender?.Name ?? "[Izbrisan korisnik]",
-                ReceiverName = m.Receiver?.Name ?? "[Izbrisan korisnik]",
-                SentAt = m.SentAt,
-                IsSentByCurrentUser = m.SenderId == currentUserId
-            });
+                bool isSentByCurrentUser = message.SenderId == currentUserId;
+
+                result.Add(new MessageDTO
+                {
+                    Id = message.Id,
+                    SenderId = message.SenderId ?? 0,        
+                    ReceiverId = message.ReceiverId ?? 0,   
+                    Text = (!isSentByCurrentUser && isOtherUserDeleted)
+                        ? "[Izbrisana poruka]"
+                        : message.Text,
+                    SenderName = "",
+                    ReceiverName = "", 
+                    SentAt = message.SentAt,
+                    IsSentByCurrentUser = isSentByCurrentUser
+                });
+            }
+
+            return result;
         }
 
         public async Task<IEnumerable<UserDTO>> GetConversationPartnersAsync(int userId)
@@ -70,15 +85,14 @@ namespace Moodle.Application.Services
             var partners = await _unitOfWork.Messages.GetConversationPartnersAsync(userId);
 
             var result = new List<UserDTO>();
-            int deletedUserIndex = -1;
 
             foreach (var user in partners)
             {
-                if (user == null)
+                if (user == null || user.IsDeleted)
                 {
                     result.Add(new UserDTO
                     {
-                        Id = deletedUserIndex--,
+                        Id = user?.Id ?? -1,
                         Name = "[Izbrisan korisnik]",
                         Email = "",
                         Role = Domain.Enums.Roles.student,

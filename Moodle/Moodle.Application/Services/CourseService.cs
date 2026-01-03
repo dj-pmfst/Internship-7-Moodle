@@ -136,5 +136,11 @@ namespace Moodle.Application.Services
                 IsActive = s.IsActive
             });
         }
+        public async Task<string?> GetCourseNameAsync(int courseId)
+        {
+            var course = await _unitOfWork.Courses.GetByIdAsync(courseId);
+            return course?.Name;
+        }
+
     }
 }

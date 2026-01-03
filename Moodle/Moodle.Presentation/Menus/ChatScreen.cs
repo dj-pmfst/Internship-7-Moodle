@@ -27,17 +27,15 @@ namespace Moodle.Presentation.Menus
 
             var receiver = await userService.GetByIdAsync(_receiverId);
 
-            bool isDeleted = (receiver == null || _receiverId < 0); 
-
-            if (isDeleted)
+            if (receiver == null)
             {
-                Console.WriteLine("Ovaj korisnik je izbrisan.");
                 await ShowReadOnlyConversationAsync(messageService);
                 return;
             }
 
             while (true)
             {
+                Console.Clear();
                 ConsoleHelper.Title($"Razgovor s {receiver.Name}");
 
                 var messages = await messageService.GetConversationAsync(
@@ -46,9 +44,6 @@ namespace Moodle.Presentation.Menus
                     _currentUser.UserId);
 
                 var messageList = messages.ToList();
-
-                Console.Clear();
-                ConsoleHelper.Title($"Razgovor s {receiver.Name}");
 
                 foreach (var message in messageList)
                 {
@@ -95,6 +90,47 @@ namespace Moodle.Presentation.Menus
             }
         }
 
+        private async Task ShowReadOnlyConversationAsync(MessageService messageService)
+        {
+            Console.Clear();
+            ConsoleHelper.Title("Razgovor s [Izbrisan korisnik]");
+
+            var messages = await messageService.GetConversationAsync(
+                _currentUser.UserId,
+                _receiverId,
+                _currentUser.UserId);
+
+            var messageList = messages.ToList();
+
+            if (!messageList.Any())
+            {
+                Console.WriteLine("Nema poruka.");
+            }
+            else
+            {
+                foreach (var message in messageList)
+                {
+                    if (message.IsSentByCurrentUser)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine($"{message.FormattedDate} [Vi]");
+                        Console.WriteLine($"  {message.Text}");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine($"[Izbrisan korisnik] {message.FormattedDate}");
+                        Console.WriteLine($"  {message.Text}"); 
+                    }
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
+            }
+
+            Console.WriteLine("\nOvaj korisnik je izbrisan. Ne možete poslati nove poruke.");
+            ConsoleHelper.Continue();
+        }
+
         private async Task SendMessageAsync(MessageService messageService)
         {
             var text = InputHelper.StringValid("Unesi poruku: ");
@@ -120,48 +156,6 @@ namespace Moodle.Presentation.Menus
                     Console.WriteLine(error);
                 }
             }
-        }
-
-        private async Task ShowReadOnlyConversationAsync(MessageService messageService)
-        {
-            ConsoleHelper.Title("Razgovor s [Izbrisan korisnik]");
-
-            var messages = await messageService.GetConversationAsync(
-                _currentUser.UserId,
-                _receiverId,
-                _currentUser.UserId);
-
-            var messageList = messages.ToList();
-
-            if (!messageList.Any())
-            {
-                Console.WriteLine("Nema poruka.");
-            }
-            else
-            {
-                foreach (var message in messageList)
-                {
-                    bool isDeleted = message.Text == "[Izbrisana poruka]";
-
-                    if (message.IsSentByCurrentUser)
-                    {
-                        Console.ForegroundColor = ConsoleColor.Cyan;
-                        Console.WriteLine($"{message.FormattedDate} [Vi]");
-                        Console.WriteLine($"  {message.Text}");
-                        Console.ResetColor();
-                    }
-                    else
-                    {
-                        Console.ForegroundColor = ConsoleColor.DarkGray;
-                        Console.WriteLine($"[Izbrisan korisnik] {message.FormattedDate}");
-                        Console.WriteLine($"  [Izbrisana poruka]");
-                        Console.ResetColor();
-                    }
-                    Console.WriteLine();
-                }
-            }
-
-            ConsoleHelper.Continue();
         }
     }
 }

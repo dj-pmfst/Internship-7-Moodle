@@ -13,18 +13,13 @@
         {
             while (true)
             {
-                var input = Console.ReadLine();
+                var input = Console.ReadLine()?.Trim();
+
                 if (int.TryParse(input, out int result) && result >= min && result <= max)
                     return result;
 
-                Console.Write($"\nNeispravan unos. Broj između {min} i {max}: ");
+                Console.Write("\nNeispravan unos. Unesite broj: ");
             }
-        }
-
-        public static int ReadChoice(string prompt, int maxChoice)
-        {
-            Console.Write(prompt);
-            return ReadInt(1, maxChoice);
         }
 
         public static string ReadPassword(string prompt)
@@ -59,7 +54,10 @@
 
         public static string ReadEmail(string prompt)
         {
-            Console.Write(prompt);
+            if (!string.IsNullOrEmpty(prompt))
+            {
+                Console.Write(prompt);
+            }
 
             while (true)
             {

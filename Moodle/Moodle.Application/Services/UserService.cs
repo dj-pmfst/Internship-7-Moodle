@@ -54,9 +54,10 @@ namespace Moodle.Application.Services
                 return ServiceResult<bool>.Failure("Admin se ne može obrisati");
             }
 
-            _unitOfWork.Users.Delete(user);
-            await _unitOfWork.SaveChangesAsync();
+            user.IsDeleted = true;
 
+            _unitOfWork.Users.Update(user); 
+            await _unitOfWork.SaveChangesAsync();
             return ServiceResult<bool>.Success(true);
         }
 

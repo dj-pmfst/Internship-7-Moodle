@@ -10,6 +10,7 @@ namespace Moodle.Domain.Entities
         public string Password { get; set; }
         public Roles Role { get; set; }
         public bool IsActive { get; set; } = true;
+        public bool IsDeleted { get; set; }
         public bool IsAdmin() => Role == Roles.admin;
         public bool IsStudent() => Role == Roles.student;
         public bool CanTeachCourse() => Role == Roles.profesor || Role == Roles.admin;

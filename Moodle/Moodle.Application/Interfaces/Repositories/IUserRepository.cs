@@ -12,6 +12,7 @@ namespace Moodle.Application.Interfaces.Repositories
         Task<IEnumerable<User>> GetAllStudentsAsync();
         Task<IEnumerable<User>> GetAllProfessorsAsync();
         Task<IEnumerable<User>> GetAllAsync();
+        Task<User?> GetByIdIncludingDeletedAsync(int id);
         Task AddAsync(User user);
         void Update(User user);
         void Delete(User user);

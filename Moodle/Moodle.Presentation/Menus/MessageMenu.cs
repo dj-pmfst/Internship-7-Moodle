@@ -119,35 +119,8 @@ namespace Moodle.Presentation.Menus
             var choice = InputHelper.ReadInt(1, partnerList.Count);
             var selectedUser = partnerList[choice - 1];
 
-            if (selectedUser.Id < 0)
-            {
-                Console.WriteLine("Ovaj korisnik je izbrisan.");
-                Console.WriteLine("Možete vidjeti stare poruke, ali ne možete poslati nove.");
-
-                if (!InputHelper.Confirmation(selectedUser.Id, "Želite li vidjeti povijest?"))
-                {
-                    return;
-                }
-
-                await ShowDeletedUserConversationAsync(messageService);
-                return;
-            }
-
             var chatScreen = new ChatScreen(_currentUser, selectedUser.Id, _serviceProvider);
             await chatScreen.ShowAsync();
-        }
-
-        private async Task ShowDeletedUserConversationAsync(MessageService messageService)
-        {
-            ConsoleHelper.Title("Razgovor s [Izbrisan korisnik]");
-
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.WriteLine("Povijest razgovora:");
-            Console.WriteLine("\n[Ova funkcionalnost zahtijeva dohvaćanje poruka s izbrisanim korisnikom]");
-            Console.WriteLine("Za sada, koristite ChatScreen s ID-om izbrisanog korisnika ako je poznat.");
-            Console.ResetColor();
-
-            ConsoleHelper.Continue();
         }
     }
 }

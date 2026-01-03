@@ -24,7 +24,6 @@
 
         public static int GetMenuChoice(int n)
         {
-            Console.WriteLine($"n: {n}");
             Console.Write("\nOdabir: ");
             return InputHelper.ReadInt(0, n);
         }

@@ -25,20 +25,23 @@ namespace Moodle.Presentation.Menus
             using var scope = _serviceProvider.CreateScope();
             var courseService = scope.ServiceProvider.GetRequiredService<CourseService>();
 
-            var courses = await LoadCoursesAsync(courseService);
-
-            if (!courses.Any())
+            while (true)
             {
-                Console.WriteLine("Nema dostupnih kolegija.");
-                return;
+                var courses = await LoadCoursesAsync(courseService);
+
+                if (!courses.Any())
+                {
+                    Console.WriteLine("Nema dostupnih kolegija.");
+                    return; 
+                }
+
+                var selectedCourse = SelectCourse(courses);
+
+                if (selectedCourse == null)
+                    return; 
+
+                await OpenNextMenuAsync(selectedCourse.Id);
             }
-
-            var selectedCourse = SelectCourse(courses);
-
-            if (selectedCourse == null)
-                return;
-
-            await OpenNextMenuAsync(selectedCourse.Id);
         }
 
         private async Task<List<CourseDTO>> LoadCoursesAsync(CourseService courseService)
