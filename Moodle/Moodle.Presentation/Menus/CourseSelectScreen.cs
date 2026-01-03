@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Moodle.Application.DTOs.Auth;
+using Moodle.Application.DTOs.Course;
 using Moodle.Application.Services;
+using Moodle.Domain.Enums;
 using Moodle.Presentation.Helpers;
 
 namespace Moodle.Presentation.Menus
@@ -23,37 +25,64 @@ namespace Moodle.Presentation.Menus
             using var scope = _serviceProvider.CreateScope();
             var courseService = scope.ServiceProvider.GetRequiredService<CourseService>();
 
-            var courses = await courseService.GetCoursesByStudentAsync(_currentUser.UserId);
-            var courseList = courses.ToList();
+            var courses = await LoadCoursesAsync(courseService);
 
-            if (!courseList.Any())
+            if (!courses.Any())
             {
-                Console.WriteLine("Nema upisanih kolegija.");
+                Console.WriteLine("Nema dostupnih kolegija.");
                 return;
             }
 
+            var selectedCourse = SelectCourse(courses);
+
+            if (selectedCourse == null)
+                return;
+
+            await OpenNextMenuAsync(selectedCourse.Id);
+        }
+
+        private async Task<List<CourseDTO>> LoadCoursesAsync(CourseService courseService)
+        {
+            return _currentUser.Role switch
+            {
+                Roles.admin => (await courseService.GetAllCoursesAsync()).ToList(),
+                _ => (await courseService.GetCoursesByStudentAsync(_currentUser.UserId)).ToList()
+            };
+        }
+
+        private CourseDTO? SelectCourse(List<CourseDTO> courses)
+        {
             MenuHelper.MenuGenerator(
-                courseList.Count,
+                courses.Count,
                 "Odaberite kolegij",
-                courseList.Select(c => c.Name).ToArray()
+                courses.Select(c => c.Name).ToArray()
             );
 
-            Console.Write("\nOdabir: ");
-            int choice = MenuHelper.GetMenuChoice(courseList.Count);
+            int maxChoice = courses.Count + 1;
+            int choice = MenuHelper.GetMenuChoice(maxChoice);
 
-            var selectedCourse = courseList[choice - 1];
+            if (choice == 0)
+                Environment.Exit(0);
 
+            if (choice == maxChoice)
+                return null; 
+
+            return courses[choice - 1];
+        }
+
+        private async Task OpenNextMenuAsync(int courseId)
+        {
             if (_choice == "Kolegiji")
             {
-                var userMenu = new UserMenu(_currentUser, selectedCourse.Id, _serviceProvider);
+                var userMenu = new UserMenu(_currentUser, courseId, _serviceProvider);
                 await userMenu.ShowAsync();
             }
             else
             {
-                var courseMenu = new CourseMenu(_currentUser, selectedCourse.Id, _serviceProvider);
+                var courseMenu = new CourseMenu(_currentUser, courseId, _serviceProvider);
                 await courseMenu.ShowAsync();
             }
-
         }
     }
 }
+

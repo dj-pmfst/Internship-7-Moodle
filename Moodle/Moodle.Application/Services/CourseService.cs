@@ -30,6 +30,11 @@ namespace Moodle.Application.Services
 
             return courses.Select(c => MapToDto(c));
         }
+        public async Task<IEnumerable<CourseDTO>> GetAllCoursesAsync()
+        {
+            var courses = await _unitOfWork.Courses.GetAllWithProfessorAsync();
+            return courses.Select(MapToDto);
+        }
 
         public async Task<CourseDetailsDTO> GetCourseDetailsAsync(int courseId)
         {

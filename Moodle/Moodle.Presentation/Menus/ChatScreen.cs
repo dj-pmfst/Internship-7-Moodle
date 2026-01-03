@@ -9,13 +9,13 @@ namespace Moodle.Presentation.Menus
     public class ChatScreen
     {
         private readonly LoginResponse _currentUser;
-        private readonly int _recieverId;
+        private readonly int _receiverId;
         private readonly IServiceProvider _serviceProvider;
 
         public ChatScreen(LoginResponse currentUser, int receiverId, IServiceProvider serviceProvider)
         {
             _currentUser = currentUser;
-            _recieverId = receiverId;
+            _receiverId = receiverId;
             _serviceProvider = serviceProvider;
         }
 
@@ -25,49 +25,52 @@ namespace Moodle.Presentation.Menus
             var messageService = scope.ServiceProvider.GetRequiredService<MessageService>();
             var userService = scope.ServiceProvider.GetRequiredService<UserService>();
 
-            var reciever = await userService.GetByIdAsync(_recieverId);
+            var receiver = await userService.GetByIdAsync(_receiverId);
 
-            if (reciever == null)
+            bool isDeleted = (receiver == null || _receiverId < 0); 
+
+            if (isDeleted)
             {
-                Console.WriteLine("Korisnik nije pronađen");
+                Console.WriteLine("Ovaj korisnik je izbrisan.");
+                await ShowReadOnlyConversationAsync(messageService);
                 return;
             }
 
             while (true)
             {
-                ConsoleHelper.Title($"Razgovor s {reciever.Name}");
+                ConsoleHelper.Title($"Razgovor s {receiver.Name}");
 
                 var messages = await messageService.GetConversationAsync(
                     _currentUser.UserId,
-                    _recieverId,
+                    _receiverId,
                     _currentUser.UserId);
 
                 var messageList = messages.ToList();
 
+                Console.Clear();
+                ConsoleHelper.Title($"Razgovor s {receiver.Name}");
+
+                foreach (var message in messageList)
+                {
+                    if (message.IsSentByCurrentUser)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine($"{message.FormattedDate} [Vi]");
+                        Console.WriteLine($"  {message.Text}");
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.White;
+                        Console.WriteLine($"{receiver.Name} {message.FormattedDate}");
+                        Console.WriteLine($"  {message.Text}");
+                    }
+                    Console.ResetColor();
+                    Console.WriteLine();
+                }
+
                 if (!messageList.Any())
                 {
                     Console.WriteLine("Započni razgovor");
-                }
-                else
-                {
-                    foreach (var message in messageList)
-                    {
-                        if (message.IsSentByCurrentUser)
-                        {
-                            Console.ForegroundColor = ConsoleColor.Cyan;
-                            Console.WriteLine($"{message.FormattedDate} [You]");
-                            Console.WriteLine($"  {message.Text}");
-                            Console.ResetColor();
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Green;
-                            Console.WriteLine($"[{message.SenderName}] {message.FormattedDate}");
-                            Console.WriteLine($"  {message.Text}");
-                            Console.ResetColor();
-                        }
-                        Console.WriteLine();
-                    }
                 }
 
                 var options = new List<string> { "Pošalji poruku", "Osvježi", "Povratak" };
@@ -99,7 +102,7 @@ namespace Moodle.Presentation.Menus
             var request = new SendMessageRequest
             {
                 SenderId = _currentUser.UserId,
-                ReceiverId = _recieverId,
+                ReceiverId = _receiverId,
                 Text = text
             };
 
@@ -117,6 +120,48 @@ namespace Moodle.Presentation.Menus
                     Console.WriteLine(error);
                 }
             }
+        }
+
+        private async Task ShowReadOnlyConversationAsync(MessageService messageService)
+        {
+            ConsoleHelper.Title("Razgovor s [Izbrisan korisnik]");
+
+            var messages = await messageService.GetConversationAsync(
+                _currentUser.UserId,
+                _receiverId,
+                _currentUser.UserId);
+
+            var messageList = messages.ToList();
+
+            if (!messageList.Any())
+            {
+                Console.WriteLine("Nema poruka.");
+            }
+            else
+            {
+                foreach (var message in messageList)
+                {
+                    bool isDeleted = message.Text == "[Izbrisana poruka]";
+
+                    if (message.IsSentByCurrentUser)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Cyan;
+                        Console.WriteLine($"{message.FormattedDate} [Vi]");
+                        Console.WriteLine($"  {message.Text}");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        Console.ForegroundColor = ConsoleColor.DarkGray;
+                        Console.WriteLine($"[Izbrisan korisnik] {message.FormattedDate}");
+                        Console.WriteLine($"  [Izbrisana poruka]");
+                        Console.ResetColor();
+                    }
+                    Console.WriteLine();
+                }
+            }
+
+            ConsoleHelper.Continue();
         }
     }
 }

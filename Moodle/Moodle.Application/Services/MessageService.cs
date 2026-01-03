@@ -55,9 +55,11 @@ namespace Moodle.Application.Services
             return messages.Select(m => new MessageDTO
             {
                 Id = m.Id,
-                Text = m.Text,
-                SenderName = m.Sender?.Name ?? "Unknown",
-                ReceiverName = m.Receiver?.Name ?? "Unknown",
+                Text = m.Sender == null
+                    ? "[Izbrisana poruka]"
+                    : m.Text,
+                SenderName = m.Sender?.Name ?? "[Izbrisan korisnik]",
+                ReceiverName = m.Receiver?.Name ?? "[Izbrisan korisnik]",
                 SentAt = m.SentAt,
                 IsSentByCurrentUser = m.SenderId == currentUserId
             });
@@ -67,14 +69,35 @@ namespace Moodle.Application.Services
         {
             var partners = await _unitOfWork.Messages.GetConversationPartnersAsync(userId);
 
-            return partners.Select(u => new UserDTO
+            var result = new List<UserDTO>();
+            int deletedUserIndex = -1;
+
+            foreach (var user in partners)
             {
-                Id = u.Id,
-                Name = u.Name,
-                Email = u.Email,
-                Role = u.Role,
-                IsActive = u.IsActive
-            });
+                if (user == null)
+                {
+                    result.Add(new UserDTO
+                    {
+                        Id = deletedUserIndex--,
+                        Name = "[Izbrisan korisnik]",
+                        Email = "",
+                        Role = Domain.Enums.Roles.student,
+                        IsActive = false
+                    });
+                }
+                else
+                {
+                    result.Add(new UserDTO
+                    {
+                        Id = user.Id,
+                        Name = user.Name,
+                        Email = user.Email,
+                        Role = user.Role,
+                        IsActive = user.IsActive
+                    });
+                }
+            }
+            return result;
         }
 
         public async Task<IEnumerable<UserDTO>> GetUsersWithoutConversationAsync(int userId)

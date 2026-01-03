@@ -25,20 +25,21 @@ namespace Moodle.Infrastructure.Repositories
         public async Task<IEnumerable<User>> GetConversationPartnersAsync(int userId)
         {
             var sentToUsers = await _dbSet
-                .Where(m => m.SenderId == userId)
+                .Where(m => m.SenderId == userId && m.ReceiverId != null)  
                 .Select(m => m.Receiver)
                 .Distinct()
                 .ToListAsync();
 
             var receivedFromUsers = await _dbSet
-                .Where(m => m.ReceiverId == userId)
+                .Where(m => m.ReceiverId == userId && m.SenderId != null) 
                 .Select(m => m.Sender)
                 .Distinct()
                 .ToListAsync();
 
             return sentToUsers
                 .Union(receivedFromUsers)
-                .OrderBy(u => u.Name)
+                .Where(u => u != null)  
+                .Distinct()
                 .ToList();
         }
         public async Task<IEnumerable<User>> GetUsersWithoutConversationAsync(int userId)

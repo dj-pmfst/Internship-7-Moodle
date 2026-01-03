@@ -25,6 +25,13 @@ namespace Moodle.Infrastructure.Repositories
                 .OrderBy(c => c.Name)
                 .ToListAsync();
         }
+        public async Task<IEnumerable<Course>> GetAllWithProfessorAsync()
+        {
+            return await _dbSet
+                .Include(c => c.Professor)
+                .OrderBy(c => c.Name)
+                .ToListAsync();
+        }
         public async Task<IEnumerable<Course>> GetCoursesByStudentAsync(int studentId)
         {
             return await _dbSet

@@ -10,6 +10,7 @@ namespace Moodle.Application.Interfaces.Repositories
         Task<IEnumerable<Course>> GetCoursesByStudentAsync(int studentId);
         Task<IEnumerable<User>> GetCourseStudentsAsync(int courseId);
         Task<bool> IsStudentEnrolledAsync(int courseId, int studentId);
+        Task<IEnumerable<Course>> GetAllWithProfessorAsync();
         Task<IEnumerable<Course>> GetAllAsync();
 
         Task AddAsync(Course course);

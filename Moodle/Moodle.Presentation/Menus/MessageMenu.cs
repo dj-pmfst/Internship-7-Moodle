@@ -94,30 +94,60 @@ namespace Moodle.Presentation.Menus
 
             if (!partnerList.Any())
             {
-                Console.WriteLine("Nema razgovora");
-                ConsoleHelper.Continue(); 
+                Console.Write("Nema aktivnih razgovora.");
+                ConsoleHelper.Continue();
                 return;
             }
 
             for (int i = 0; i < partnerList.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {partnerList[i].Name} ({partnerList[i].Role})");
+                var partner = partnerList[i];
+
+                if (partner.Name == "[Izbrisan korisnik]")
+                {
+                    Console.ForegroundColor = ConsoleColor.DarkGray;
+                    Console.WriteLine($"{i + 1}. {partner.Name}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    Console.WriteLine($"{i + 1}. {partner.Name} ({partner.Role})");
+                }
             }
 
-            Console.Write("\nUnesite ID razgovora ili 0 za povratak: ");
-            var choice = InputHelper.ReadInt(0, partnerList.Count());
-            if (choice != 0)
-            {
-                var selectedUser = partnerList[choice - 1];
+            Console.Write("\nOdaberite razgovor (1-{0}): ", partnerList.Count);
+            var choice = InputHelper.ReadInt(1, partnerList.Count);
+            var selectedUser = partnerList[choice - 1];
 
-                var chatScreen = new ChatScreen(_currentUser, selectedUser.Id, _serviceProvider);
-                await chatScreen.ShowAsync();
-            }
-            else
+            if (selectedUser.Id < 0)
             {
+                Console.WriteLine("Ovaj korisnik je izbrisan.");
+                Console.WriteLine("Možete vidjeti stare poruke, ali ne možete poslati nove.");
+
+                if (!InputHelper.Confirmation(selectedUser.Id, "Želite li vidjeti povijest?"))
+                {
+                    return;
+                }
+
+                await ShowDeletedUserConversationAsync(messageService);
                 return;
             }
 
+            var chatScreen = new ChatScreen(_currentUser, selectedUser.Id, _serviceProvider);
+            await chatScreen.ShowAsync();
+        }
+
+        private async Task ShowDeletedUserConversationAsync(MessageService messageService)
+        {
+            ConsoleHelper.Title("Razgovor s [Izbrisan korisnik]");
+
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("Povijest razgovora:");
+            Console.WriteLine("\n[Ova funkcionalnost zahtijeva dohvaćanje poruka s izbrisanim korisnikom]");
+            Console.WriteLine("Za sada, koristite ChatScreen s ID-om izbrisanog korisnika ako je poznat.");
+            Console.ResetColor();
+
+            ConsoleHelper.Continue();
         }
     }
 }
