@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moodle.Application.Interfaces;
+using Moodle.Application.Services;
 using Moodle.Infrastructure.Persistence;
 
 namespace Moodle.Infrastructure
@@ -12,9 +13,10 @@ namespace Moodle.Infrastructure
             this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<MoodleDbContext>(options => options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddScoped<StatisticsService>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             return services;
         }
+
     }
 }

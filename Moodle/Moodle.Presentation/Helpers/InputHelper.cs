@@ -93,20 +93,5 @@
                 Console.Write("\nUnos ne može biti prazan: ");
             }
         }
-
-        public static DateTime DateValid(string prompt)
-        {
-            Console.Write(prompt);
-
-            while (true)
-            {
-                var input = Console.ReadLine();
-
-                if (DateTime.TryParse(input, out DateTime date) && date.Year <= 2027)
-                    return date;
-
-                Console.Write("\nNeispravan datum (dd/MM/yyyy): ");
-            }
-        }
     }
 }

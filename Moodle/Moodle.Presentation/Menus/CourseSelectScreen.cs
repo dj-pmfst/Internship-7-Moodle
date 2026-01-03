@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moodle.Application.DTOs.Auth;
 using Moodle.Application.DTOs.Course;
 using Moodle.Application.Services;
@@ -55,20 +56,13 @@ namespace Moodle.Presentation.Menus
 
         private CourseDTO? SelectCourse(List<CourseDTO> courses)
         {
-            MenuHelper.MenuGenerator(
-                courses.Count,
-                "Odaberite kolegij",
-                courses.Select(c => c.Name).ToArray()
-            );
-
-            int maxChoice = courses.Count + 1;
-            int choice = MenuHelper.GetMenuChoice(maxChoice);
+            var choice = KeyboardHelper.MenuGeneratorWithHybridInput(courses.Count(), "Odaberite kolegij", courses.Select(c => c.Name).ToArray());
 
             if (choice == 0)
                 Environment.Exit(0);
 
-            if (choice == maxChoice)
-                return null; 
+            if (choice == -1)
+                return null;
 
             return courses[choice - 1];
         }

@@ -1,4 +1,5 @@
-﻿using Moodle.Domain.Entities;
+﻿using Moodle.Application.DTOs.Statistics;
+using Moodle.Domain.Entities;
 
 namespace Moodle.Application.Interfaces.Repositories
 {
@@ -13,5 +14,6 @@ namespace Moodle.Application.Interfaces.Repositories
         Task AddAsync(Message message);
         void Update(Message message);
         void Delete(Message message);
+        Task<List<TopUserDTO>> GetTopMessageSendersAsync(int topN, DateTime? fromDate);
     }
 }

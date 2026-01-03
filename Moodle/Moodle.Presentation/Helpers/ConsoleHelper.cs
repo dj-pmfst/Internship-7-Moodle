@@ -26,5 +26,13 @@
             Console.Write("\nNeispravan unos. \nUnesite opet. ");
             return Console.ReadLine();
         }
+
+        public static void KeyboardNavigation()
+        {
+            Console.WriteLine("\n-----------------------------------");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.WriteLine("↑/↓ + Enter  ili  unesi broj + Enter  |  ESC za povratak");
+            Console.ResetColor();
+        }
     }
 }

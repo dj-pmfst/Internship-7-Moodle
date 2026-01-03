@@ -4,7 +4,6 @@ using Moodle.Application.DTOs.Auth;
 using Moodle.Application.DTOs.Course;
 using Moodle.Application.DTOs.Material;
 using Moodle.Application.Services;
-using Moodle.Domain.Entities;
 using Moodle.Presentation.Helpers;
 
 namespace Moodle.Presentation.Menus
@@ -30,10 +29,7 @@ namespace Moodle.Presentation.Menus
 
                 int n = options.Count;
 
-                MenuHelper.MenuGenerator(n, "Upravljanje kolegijima", options.ToArray());
-
-                Console.Write("\nOdabir: ");
-                var choice = MenuHelper.GetMenuChoice(n+1);
+                var choice = KeyboardHelper.MenuGeneratorWithHybridInput(n, "Upravljanje kolegijima", options.ToArray());
 
                 switch (choice)
                 {

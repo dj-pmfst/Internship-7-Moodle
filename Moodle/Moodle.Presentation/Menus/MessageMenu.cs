@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Moodle.Application.DTOs.Auth;
 using Moodle.Application.Services;
 using Moodle.Presentation.Helpers;
@@ -22,8 +23,7 @@ namespace Moodle.Presentation.Menus
             {
                 var options = new List<string> { "Nova poruka", "Moji razgovori" };
                 int n = options.Count;
-                MenuHelper.MenuGenerator(n, "Razgovori", options.ToArray());
-                var choice = MenuHelper.GetMenuChoice(n + 1);
+                var choice = KeyboardHelper.MenuGeneratorWithHybridInput(n, "Razgovori", options.ToArray());
 
                 switch (choice)
                 {
@@ -36,7 +36,7 @@ namespace Moodle.Presentation.Menus
                     case 2:
                         await MyChatsAsync();
                         break;
-                    case 3:
+                    case -1:
                         return;
                 }
             }
@@ -116,7 +116,23 @@ namespace Moodle.Presentation.Menus
             }
 
             Console.Write("\nOdaberite razgovor (1-{0}): ", partnerList.Count);
-            var choice = InputHelper.ReadInt(1, partnerList.Count);
+            var labels = partnerList
+                .Select(p => p.Name == "[Izbrisan korisnik]"
+                    ? p.Name
+                    : $"{p.Name} ({p.Role})")
+                .ToArray();
+
+            var choice = KeyboardHelper.MenuGeneratorWithHybridInput(
+                labels.Length,
+                "Moji razgovori",
+                labels
+            );
+
+            if (choice == -1)
+            {
+                return; 
+            }
+
             var selectedUser = partnerList[choice - 1];
 
             var chatScreen = new ChatScreen(_currentUser, selectedUser.Id, _serviceProvider);

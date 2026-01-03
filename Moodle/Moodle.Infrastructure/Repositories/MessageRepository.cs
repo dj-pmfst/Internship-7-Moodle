@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moodle.Application.DTOs.Statistics;
 using Moodle.Application.Interfaces.Repositories;
 using Moodle.Domain.Entities;
 using Moodle.Infrastructure.Persistence;
@@ -70,6 +71,24 @@ namespace Moodle.Infrastructure.Repositories
         {
             return await _dbSet
                 .CountAsync(m => m.SenderId == userId);
+        }
+        public async Task<List<TopUserDTO>> GetTopMessageSendersAsync(int topN, DateTime? fromDate)
+        {
+            var query = _context.Messages.AsQueryable();
+
+            if (fromDate.HasValue)
+                query = query.Where(m => m.SentAt >= fromDate.Value);
+
+            return await query
+                .GroupBy(m => m.Sender.Name)
+                .Select(g => new TopUserDTO
+                {
+                    UserName = g.Key,
+                    MessageCount = g.Count()
+                })
+                .OrderByDescending(x => x.MessageCount)
+                .Take(topN)
+                .ToListAsync();
         }
     }
 }

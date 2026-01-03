@@ -1,4 +1,6 @@
-﻿namespace Moodle.Domain.Entities
+﻿using System;
+
+namespace Moodle.Domain.Entities
 {
     public class Material
     {
@@ -7,6 +9,6 @@
         public string Url { get; set; }
         public int CourseID { get; set; }
         public Course Course { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

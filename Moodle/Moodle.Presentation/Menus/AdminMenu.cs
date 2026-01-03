@@ -25,9 +25,7 @@ namespace Moodle.Presentation.Menus
 
                 int n = options.Count;
 
-                MenuHelper.MenuGenerator(n, "Upravljanje korisnicima", options.ToArray());
-
-                var choice = MenuHelper.GetMenuChoice(4);
+                var choice = KeyboardHelper.MenuGeneratorWithHybridInput(n, "Upravljanje korisnicma", options.ToArray());
 
                 switch (choice)
                 {
@@ -43,7 +41,7 @@ namespace Moodle.Presentation.Menus
                     case 3:
                         await RoleChangeAsync();
                         break;
-                    case 4:
+                    case -1:
                         return;
                 }
             }

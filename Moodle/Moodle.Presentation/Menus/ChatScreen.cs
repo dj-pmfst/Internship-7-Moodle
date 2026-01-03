@@ -40,8 +40,7 @@ namespace Moodle.Presentation.Menus
 
                 var messages = await messageService.GetConversationAsync(
                     _currentUser.UserId,
-                    _receiverId,
-                    _currentUser.UserId);
+                    _receiverId);
 
                 var messageList = messages.ToList();
 
@@ -68,7 +67,7 @@ namespace Moodle.Presentation.Menus
                     Console.WriteLine("Započni razgovor");
                 }
 
-                var options = new List<string> { "Pošalji poruku", "Osvježi", "Povratak" };
+                var options = new List<string> { "Pošalji poruku", "Osvježi", "Povratak"};
 
                 for (int i = 0; i < 3; i++)
                 {
@@ -97,8 +96,8 @@ namespace Moodle.Presentation.Menus
 
             var messages = await messageService.GetConversationAsync(
                 _currentUser.UserId,
-                _receiverId,
-                _currentUser.UserId);
+                _receiverId
+            );
 
             var messageList = messages.ToList();
 

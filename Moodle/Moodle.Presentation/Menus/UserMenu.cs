@@ -36,12 +36,12 @@ namespace Moodle.Presentation.Menus
 
                 int n = options.Count;
 
-                MenuHelper.MenuGenerator(n, $"Kolegij '{courseName}'", options.ToArray());
-                n = n + 1;
-                var choice = MenuHelper.GetMenuChoice(n);
+                var choice = KeyboardHelper.MenuGeneratorWithHybridInput(n, $"Kolegij '{courseName}'", options.ToArray());
 
                 switch (choice)
                 {
+                    case -1:
+                        return;
                     case 0:
                         Environment.Exit(0);
                         break;
@@ -55,14 +55,8 @@ namespace Moodle.Presentation.Menus
                         if (_currentUser.Role == Roles.profesor)
                         {
                             await GetStudentsAsync();
-                            break;
                         }
-                        else
-                        {
-                            return;
-                        }   
-                     case 4:
-                        return;
+                        break;
                 }
                 ConsoleHelper.Continue();
             }

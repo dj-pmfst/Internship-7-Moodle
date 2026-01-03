@@ -75,5 +75,17 @@ namespace Moodle.Infrastructure.Repositories
             return await _context.Users
                 .FirstOrDefaultAsync(u => u.Id == id);
         }
+
+        public async Task<int> GetUserCountByRoleAsync(Roles role, DateTime? fromDate = null)
+        {
+            var query = _dbSet.Where(u => u.Role == role && !u.IsDeleted);
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(u => u.CreatedAt >= fromDate.Value);
+            }
+
+            return await query.CountAsync();
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Moodle.Application.DTOs.Statistics;
 using Moodle.Application.Interfaces.Repositories;
 using Moodle.Domain.Entities;
 using Moodle.Infrastructure.Persistence;
@@ -53,6 +54,32 @@ namespace Moodle.Infrastructure.Repositories
         {
             return await _context.Enrollments
                 .AnyAsync(ce => ce.CourseId == courseId && ce.StudentId == studentId);
+        }
+
+        public async Task<int> GetCourseCountAsync(DateTime? fromDate = null)
+        {
+            var query = _dbSet.AsQueryable();
+
+            if (fromDate.HasValue)
+            {
+                query = query.Where(c => c.CreatedAt >= fromDate.Value);
+            }
+
+            return await query.CountAsync();
+        }
+
+        public async Task<List<TopCourseDTO>> GetTopCoursesByEnrollmentAsync(int topN)
+        {
+            return await _context.Enrollments
+                .GroupBy(e => e.Course.Name)
+                .Select(g => new TopCourseDTO
+                {
+                    CourseName = g.Key,
+                    StudentCount = g.Count()
+                })
+                .OrderByDescending(x => x.StudentCount)
+                .Take(topN)
+                .ToListAsync();
         }
     }
 }

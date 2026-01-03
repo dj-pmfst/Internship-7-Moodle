@@ -6,7 +6,8 @@
         public string Name { get; set; }
         public string Description { get; set; }
         public int? ProfessorId { get; set; }
-        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
 
         public User? Professor { get; set; }
         public ICollection<Material> Materials { get; set; }

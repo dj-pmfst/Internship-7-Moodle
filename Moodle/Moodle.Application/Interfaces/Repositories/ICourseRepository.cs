@@ -1,4 +1,5 @@
-﻿using Moodle.Domain.Entities;
+﻿using Moodle.Application.DTOs.Statistics;
+using Moodle.Domain.Entities;
 
 namespace Moodle.Application.Interfaces.Repositories
 {
@@ -16,5 +17,8 @@ namespace Moodle.Application.Interfaces.Repositories
         Task AddAsync(Course course);
         void Update(Course course);
         void Delete(Course course);
+
+        Task<int> GetCourseCountAsync(DateTime? fromDate = null);
+        Task<List<TopCourseDTO>> GetTopCoursesByEnrollmentAsync(int topN);
     }
 }

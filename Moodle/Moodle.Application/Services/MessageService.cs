@@ -48,9 +48,10 @@ namespace Moodle.Application.Services
             return ServiceResult<MessageDTO>.Success(dto);
         }
 
-        public async Task<IEnumerable<MessageDTO>> GetConversationAsync(int userId1, int userId2, int currentUserId)
+        public async Task<IEnumerable<MessageDTO>> GetConversationAsync(int userId1, int userId2)
         {
             var messages = await _unitOfWork.Messages.GetConversationMessagesAsync(userId1, userId2);
+            var currentUserId = userId1;
 
             var otherUserId = userId1 == currentUserId ? userId2 : userId1;
             var otherUser = await _unitOfWork.Users.GetByIdIncludingDeletedAsync(otherUserId);

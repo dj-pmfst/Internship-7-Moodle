@@ -17,5 +17,6 @@ namespace Moodle.Application.Interfaces.Repositories
         void Update(User user);
         void Delete(User user);
         Task<bool> EmailExistsAsync(string email, int? excludeUserId = null);
+        Task<int> GetUserCountByRoleAsync(Roles role, DateTime? fromDate = null);
     }
 }

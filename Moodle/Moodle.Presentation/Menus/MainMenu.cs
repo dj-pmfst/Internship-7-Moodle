@@ -28,19 +28,20 @@ namespace Moodle.Presentation.Menus
                 else if (_currentUser.Role == Roles.admin)
                 {
                     options.Add("Korisnici");
+                    options.Add("Statistika");
                 }
 
                 int n = options.Count;
 
-                MenuHelper.MenuGenerator(n,"Glavni izbornik", options.ToArray());
-
-                var choice = MenuHelper.GetMenuChoice(n+1);
+                var choice = KeyboardHelper.MenuGeneratorWithHybridInput(n, "Glavni izbornik", options.ToArray());
 
                 switch (choice)
                 {
                     case 0:
                         Environment.Exit(0);
                         break;
+                    case -1: 
+                        return;
                     case 1:
                         var userMenu = new CourseSelectScreen(_currentUser, _serviceProvider, options[0]);
                         await userMenu.ShowAsync();
@@ -67,7 +68,14 @@ namespace Moodle.Presentation.Menus
                             return;
                         }
                     case 4:
-                        return;
+                        if (_currentUser.Role == Roles.admin)
+                        {
+                            var statisticsMenu = new StatisticsMenu(_currentUser, _serviceProvider);
+                            await statisticsMenu.ShowAsync();
+                            break;
+                        }
+                        else
+                            return;
                 }
                 ConsoleHelper.Continue();
             }
