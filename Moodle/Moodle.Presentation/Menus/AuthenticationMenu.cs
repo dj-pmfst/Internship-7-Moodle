@@ -17,11 +17,8 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                MenuHelper.MenuGenerator(1, "Moodle",
-                    [
-                        "Prijava",
-                        "Registracija"
-                    ]);
+                var options = new List<string> { "Prijava", "Registracija" };
+                MenuHelper.MenuGenerator(2, "Moodle", options.ToArray());
 
                 var choice = MenuHelper.GetMenuChoice(2);
 
@@ -85,35 +82,35 @@ namespace Moodle.Presentation.Menus
             var name = InputHelper.StringValid("Ime: ");
             var email = InputHelper.ReadEmail("Email: ");
             var password = InputHelper.ReadPassword("Šifra: ");
-            var confirmPassword = InputHelper.ReadPassword("Ponovno unesite šifru: ");
+            string confirmPassword;
             while (true)
             {
+                confirmPassword = InputHelper.ReadPassword("Ponovno unesite šifru: ");
                 if (confirmPassword != password)
                 {
-                    confirmPassword = ConsoleHelper.ErrInput();
+                    ConsoleHelper.ErrInput();
+                    continue;
                 }
-                else if (confirmPassword == password)
-                {
-                    break;
-                }
-            }           
+                break;
+            }
 
             var captcha = _authenticationService.GenerateCaptcha();
             Console.WriteLine($"\nCaptcha: {captcha}");
-            var captchaInput = InputHelper.StringValid("Unos: ");
+            string captchaInput;
 
             while (true)
             {
+                captchaInput = InputHelper.StringValid("Unos: ");
+
                 if (captcha != captchaInput)
                 {
                     ConsoleHelper.ErrInput();
-                    return;
+                    continue;
                 }
-                else if (captcha == captchaInput)
-                {
-                    break;
-                }
+
+                break;
             }
+
 
             var request = new RegisterRequest
             {

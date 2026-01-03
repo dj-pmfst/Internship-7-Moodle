@@ -18,30 +18,28 @@ namespace Moodle.Presentation.Menus
 
         public async Task ShowAsync()
         {
-            var options = new List<string> { "Nova poruka", "Moji razgovori" };
-
-            int n = options.Count;
-
-            MenuHelper.MenuGenerator(n, "Razgovori", options.ToArray());
-
-            var choice = MenuHelper.GetMenuChoice(n+1);
-
-            switch (choice)
+            while (true)
             {
-                case 0:
-                    Environment.Exit(0);
-                    break;
-                case 1:
-                    await NewMessageAsync();
-                    break;
-                case 2:
-                    await MyChatsAsync();
-                    break;
-                case 3:
-                    return;
-            }
+                var options = new List<string> { "Nova poruka", "Moji razgovori" };
+                int n = options.Count;
+                MenuHelper.MenuGenerator(n, "Razgovori", options.ToArray());
+                var choice = MenuHelper.GetMenuChoice(n + 1);
 
-            ConsoleHelper.Continue();
+                switch (choice)
+                {
+                    case 0:
+                        Environment.Exit(0);
+                        break;
+                    case 1:
+                        await NewMessageAsync();
+                        break;
+                    case 2:
+                        await MyChatsAsync();
+                        break;
+                    case 3:
+                        return;
+                }
+            }
         }
 
         private async Task NewMessageAsync()
@@ -57,6 +55,7 @@ namespace Moodle.Presentation.Menus
             if (!userList.Any())
             {
                 Console.WriteLine("Nema novih korisnika");
+                ConsoleHelper.Continue();  
                 return;
             }
 
@@ -96,6 +95,7 @@ namespace Moodle.Presentation.Menus
             if (!partnerList.Any())
             {
                 Console.WriteLine("Nema razgovora");
+                ConsoleHelper.Continue(); 
                 return;
             }
 
@@ -104,12 +104,20 @@ namespace Moodle.Presentation.Menus
                 Console.WriteLine($"{i + 1}. {partnerList[i].Name} ({partnerList[i].Role})");
             }
 
-            Console.Write("\nUnesite ID razgovora: ");
-            var choice = InputHelper.ReadInt(1, partnerList.Count());
-            var selectedUser = partnerList[choice - 1];
+            Console.Write("\nUnesite ID razgovora ili 0 za povratak: ");
+            var choice = InputHelper.ReadInt(0, partnerList.Count());
+            if (choice != 0)
+            {
+                var selectedUser = partnerList[choice - 1];
 
-            var chatScreen = new ChatScreen(_currentUser, selectedUser.Id, _serviceProvider);
-            await chatScreen.ShowAsync();
+                var chatScreen = new ChatScreen(_currentUser, selectedUser.Id, _serviceProvider);
+                await chatScreen.ShowAsync();
+            }
+            else
+            {
+                return;
+            }
+
         }
     }
 }

@@ -30,7 +30,6 @@ namespace Moodle.Presentation.Menus
             if (reciever == null)
             {
                 Console.WriteLine("Korisnik nije pronađen");
-                ConsoleHelper.Continue();
                 return;
             }
 

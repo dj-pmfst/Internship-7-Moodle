@@ -4,6 +4,7 @@ using Moodle.Application.DTOs.Auth;
 using Moodle.Application.DTOs.Course;
 using Moodle.Application.DTOs.Material;
 using Moodle.Application.Services;
+using Moodle.Domain.Entities;
 using Moodle.Presentation.Helpers;
 
 namespace Moodle.Presentation.Menus
@@ -32,7 +33,7 @@ namespace Moodle.Presentation.Menus
                 MenuHelper.MenuGenerator(n, "Upravljanje kolegijima", options.ToArray());
 
                 Console.Write("\nOdabir: ");
-                var choice = MenuHelper.GetMenuChoice(n);
+                var choice = MenuHelper.GetMenuChoice(n+1);
 
                 switch (choice)
                 {
@@ -79,8 +80,19 @@ namespace Moodle.Presentation.Menus
                 Console.WriteLine($"{studentList[i].Id}. {studentList[i].Name} - {studentList[i].Email}");
             }
 
-            Console.WriteLine("\n Unesite ID studenta kojeg želite dodati: ");
-            var studentId = InputHelper.ReadInt(1, students.Count());
+            Console.Write("\nUnesite ID studenta kojeg želite dodati: ");
+
+            int studentId;
+            var validIds = studentList.Select(u => u.Id).ToHashSet();
+
+            while (true)
+            {
+                studentId = InputHelper.ReadInt();
+                if (validIds.Contains(studentId))
+                    break;
+
+                ConsoleHelper.ErrInput();
+            }
 
             var request = new EnrollStudentRequest
             {

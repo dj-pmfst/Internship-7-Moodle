@@ -43,10 +43,10 @@ namespace Moodle.Presentation.Menus
 
             var selectedCourse = courseList[choice - 1];
 
-            if (_choice != "Ipravljanje kolegijima")
+            if (_choice == "Kolegiji")
             {
-            var userMenu = new UserMenu(_currentUser, selectedCourse.Id, _serviceProvider);
-            await userMenu.ShowAsync();
+                var userMenu = new UserMenu(_currentUser, selectedCourse.Id, _serviceProvider);
+                await userMenu.ShowAsync();
             }
             else
             {

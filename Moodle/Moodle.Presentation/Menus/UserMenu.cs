@@ -32,7 +32,7 @@ namespace Moodle.Presentation.Menus
 
                 int n = options.Count;
 
-                MenuHelper.MenuGenerator(n, "Kolegij", options.ToArray());
+                MenuHelper.MenuGenerator(n, $"Kolegij '{_courseId}'", options.ToArray());
                 n = n + 1;
                 Console.WriteLine($"dhsjfkil {n}");
                 var choice = MenuHelper.GetMenuChoice(n);

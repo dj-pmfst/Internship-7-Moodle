@@ -26,7 +26,7 @@ namespace Moodle.Presentation.Menus
             MenuHelper.MenuGenerator(n, "Upravljanje korisnicima", options.ToArray());
 
             Console.Write("\nOdabir: ");
-            var choice = MenuHelper.GetMenuChoice(n);
+            var choice = MenuHelper.GetMenuChoice(4);
 
             switch (choice)
             {
@@ -42,8 +42,6 @@ namespace Moodle.Presentation.Menus
                     await RoleChangeAsync();
                     break;
             }
-
-            ConsoleHelper.Continue();
         }
 
         private async Task DeleteUserAsync()
@@ -180,9 +178,10 @@ namespace Moodle.Presentation.Menus
 
             int userId;
             var validIds = allUsers.Select(u => u.Id).ToHashSet();
+
+            Console.Write("\nUnesite ID korisnika kojem želite izmjeniti ulogu: ");
             while (true)
             {
-                Console.Write("\nUnesite ID korisnika kojem želite izmjeniti ulogu: ");
                 userId = InputHelper.ReadInt();
                 if (validIds.Contains(userId))
                     break;
