@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using Moodle.Application.DTOs.Auth;
 using Moodle.Application.Services;
 using Moodle.Presentation.Helpers;
@@ -21,22 +20,21 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                var options = new List<string> { "Nova poruka", "Moji razgovori" };
-                int n = options.Count;
-                var choice = KeyboardHelper.MenuGeneratorWithHybridInput(n, "Razgovori", options.ToArray());
+                var options = new[] { "Nova poruka", "Moji razgovori" };
+                int choice = KeyboardHelper.MenuGeneratorWithHybridInput(options.Length, "Razgovori", options);
 
                 switch (choice)
                 {
-                    case 0:
-                        Environment.Exit(0);
+                    case 0: 
+                        Environment.Exit(0); 
                         break;
-                    case 1:
-                        await NewMessageAsync();
+                    case 1: 
+                        await NewMessageAsync(); 
                         break;
-                    case 2:
-                        await MyChatsAsync();
+                    case 2: 
+                        await MyChatsAsync(); 
                         break;
-                    case -1:
+                    case -1: 
                         return;
                 }
             }
@@ -46,39 +44,23 @@ namespace Moodle.Presentation.Menus
         {
             using var scope = _serviceProvider.CreateScope();
             var messageService = scope.ServiceProvider.GetRequiredService<MessageService>();
+            var userService = scope.ServiceProvider.GetRequiredService<UserService>();
 
             ConsoleHelper.Title("Nova poruka");
 
-            var users = await messageService.GetUsersWithoutConversationAsync(_currentUser.UserId);
-            var userList = users.ToList();
-
-            if (!userList.Any())
+            var users = (await messageService.GetUsersWithoutConversationAsync(_currentUser.UserId)).ToList();
+            if (!users.Any())
             {
                 Console.WriteLine("Nema novih korisnika");
-                ConsoleHelper.Continue();  
+                ConsoleHelper.Continue();
                 return;
             }
 
-            Console.WriteLine("Dostupni korisinici:");
-            for (int i = 0; i < userList.Count; i++)
-            {
-                Console.WriteLine($"{userList[i].Id} - {userList[i].Name} ({userList[i].Role})");
-            }
-            var validIds = userList.Select(u => u.Id).ToList();
-            int userId;
+            var selectedUser = MenuHelper.SelectFromList(users, "Dostupni korisnici", u => $"{u.Name} ({u.Role})");
+            if (selectedUser == null) 
+                return;
 
-            while (true)
-            {
-                Console.Write("\nUnesite ID korisnika kojem želite poslati poruku: ");
-                userId = InputHelper.ReadInt();
-
-                if (validIds.Contains(userId))
-                    break;
-
-                Console.WriteLine("Nevažeći ID. Pokušajte ponovno.");
-            }
-
-            var chatScreen = new ChatScreen(_currentUser, userId, _serviceProvider);
+            var chatScreen = new ChatScreen(_currentUser, selectedUser.Id, _serviceProvider);
             await chatScreen.ShowAsync();
         }
 
@@ -89,53 +71,20 @@ namespace Moodle.Presentation.Menus
 
             ConsoleHelper.Title("Moji razgovori");
 
-            var partners = await messageService.GetConversationPartnersAsync(_currentUser.UserId);
-            var partnerList = partners.ToList();
-
-            if (!partnerList.Any())
+            var partners = (await messageService.GetConversationPartnersAsync(_currentUser.UserId)).ToList();
+            if (!partners.Any())
             {
-                Console.Write("Nema aktivnih razgovora.");
+                Console.WriteLine("Nema aktivnih razgovora.");
                 ConsoleHelper.Continue();
                 return;
             }
 
-            for (int i = 0; i < partnerList.Count; i++)
-            {
-                var partner = partnerList[i];
+            var selectedPartner = MenuHelper.SelectFromList(partners, "Moji razgovori",
+                p => p.Name == "[Izbrisan korisnik]" ? p.Name : $"{p.Name} ({p.Role})");
+            if (selectedPartner == null) 
+                return;
 
-                if (partner.Name == "[Izbrisan korisnik]")
-                {
-                    Console.ForegroundColor = ConsoleColor.DarkGray;
-                    Console.WriteLine($"{i + 1}. {partner.Name}");
-                    Console.ResetColor();
-                }
-                else
-                {
-                    Console.WriteLine($"{i + 1}. {partner.Name} ({partner.Role})");
-                }
-            }
-
-            Console.Write("\nOdaberite razgovor (1-{0}): ", partnerList.Count);
-            var labels = partnerList
-                .Select(p => p.Name == "[Izbrisan korisnik]"
-                    ? p.Name
-                    : $"{p.Name} ({p.Role})")
-                .ToArray();
-
-            var choice = KeyboardHelper.MenuGeneratorWithHybridInput(
-                labels.Length,
-                "Moji razgovori",
-                labels
-            );
-
-            if (choice == -1)
-            {
-                return; 
-            }
-
-            var selectedUser = partnerList[choice - 1];
-
-            var chatScreen = new ChatScreen(_currentUser, selectedUser.Id, _serviceProvider);
+            var chatScreen = new ChatScreen(_currentUser, selectedPartner.Id, _serviceProvider);
             await chatScreen.ShowAsync();
         }
     }

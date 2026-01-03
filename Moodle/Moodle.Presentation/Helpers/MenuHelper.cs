@@ -27,5 +27,17 @@
             Console.Write("\nOdabir: ");
             return InputHelper.ReadInt(0, n);
         }
+
+        public static T? SelectFromList<T>(IEnumerable<T> items, string title, Func<T, string> labelSelector)
+        {
+            var list = items.ToList();
+            if (!list.Any()) return default;
+
+            var labels = list.Select(labelSelector).ToArray();
+            int choice = KeyboardHelper.MenuGeneratorWithHybridInput(labels.Length, title, labels);
+
+            if (choice <= 0 || choice > list.Count) return default;
+            return list[choice - 1];
+        }
     }
 }

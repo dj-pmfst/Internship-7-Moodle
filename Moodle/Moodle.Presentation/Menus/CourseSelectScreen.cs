@@ -50,7 +50,9 @@ namespace Moodle.Presentation.Menus
             return _currentUser.Role switch
             {
                 Roles.admin => (await courseService.GetAllCoursesAsync()).ToList(),
-                _ => (await courseService.GetCoursesByStudentAsync(_currentUser.UserId)).ToList()
+                Roles.profesor => (await courseService.GetCoursesByProfessorAsync(_currentUser.UserId)).ToList(),  
+                Roles.student => (await courseService.GetCoursesByStudentAsync(_currentUser.UserId)).ToList(),
+                _ => new List<CourseDTO>()  
             };
         }
 

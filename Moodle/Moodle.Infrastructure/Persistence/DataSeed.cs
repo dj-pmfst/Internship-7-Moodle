@@ -161,8 +161,8 @@ namespace Moodle.Infrastructure.Persistence
 
             var announcement3 = new Announcement
             {
-                CourseId = course2.Id,
-                ProfessorId = prof1.Id,
+                CourseId = course3.Id,
+                ProfessorId = prof2.Id,
                 Title = "Raspored ispita",
                 Text = "U prilogu je raspored ispita",
                 CreatedAt = DateTime.UtcNow.AddDays(-7)

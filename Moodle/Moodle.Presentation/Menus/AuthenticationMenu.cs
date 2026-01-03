@@ -17,21 +17,16 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                var options = new List<string> { "Prijava", "Registracija" };
-                MenuHelper.MenuGenerator(2, "Moodle", options.ToArray());
-
-                var choice = MenuHelper.GetMenuChoice(2);
+                var options = new[] { "Prijava", "Registracija" };
+                int choice = KeyboardHelper.MenuGeneratorWithHybridInput(options.Length, "Moodle", options);
 
                 switch (choice)
                 {
-                    case 0:
+                    case 0: 
                         return null;
                     case 1:
-                        var LoginResult = await LoginAsync();
-                        if (LoginResult != null)
-                        {
-                            return LoginResult;
-                        }
+                        var loginResult = await LoginAsync();
+                        if (loginResult != null) return loginResult;
                         break;
                     case 2:
                         await RegisterAsync();
@@ -43,36 +38,20 @@ namespace Moodle.Presentation.Menus
         private async Task<LoginResponse?> LoginAsync()
         {
             ConsoleHelper.Title("Prijava");
-
             var email = InputHelper.ReadEmail("Email: ");
             var password = InputHelper.ReadPassword("Šifra: ");
 
-            var request = new LoginRequest
-            {
-                Email = email,
-                Password = password
-            };
+            var result = await _authenticationService.LoginAsync(new LoginRequest { Email = email, Password = password });
 
-            var result = await _authenticationService.LoginAsync(request);
-
-            if (result.IsSuccess)
+            if (ConsoleHelper.DisplayResult(result, "Uspješna prijava."))
             {
-                Console.WriteLine($"Uspješna prijava.");
                 ConsoleHelper.Continue();
                 return result.Value;
             }
-            else
-            {
-                Console.WriteLine("Neuspješna prijava.");
-                foreach (var error in result.ValidationResult.GetErrorMessages())
-                {
-                    Console.WriteLine(error);
-                }
 
-                Console.WriteLine("Pričekajte 30s prije ponovnog pokušaja...");
-                await Task.Delay(30000); 
-                return null;
-            }
+            Console.WriteLine("Pričekajte 30s prije ponovnog pokušaja...");
+            await Task.Delay(30000);
+            return null;
         }
 
         private async Task RegisterAsync()
@@ -82,35 +61,20 @@ namespace Moodle.Presentation.Menus
             var name = InputHelper.StringValid("Ime: ");
             var email = InputHelper.ReadEmail("Email: ");
             var password = InputHelper.ReadPassword("Šifra: ");
-            string confirmPassword;
-            while (true)
-            {
-                confirmPassword = InputHelper.ReadPassword("Ponovno unesite šifru: ");
-                if (confirmPassword != password)
-                {
-                    ConsoleHelper.ErrInput();
-                    continue;
-                }
-                break;
-            }
+            var confirmPassword = InputHelper.ErrInput("Ponovno unesite šifru: ", password);
 
             var captcha = _authenticationService.GenerateCaptcha();
             Console.WriteLine($"\nCaptcha: {captcha}");
             string captchaInput;
 
-            while (true)
+            do
             {
                 captchaInput = InputHelper.StringValid("Unos: ");
-
-                if (captcha != captchaInput)
+                if (captchaInput != captcha)
                 {
-                    ConsoleHelper.ErrInput();
-                    continue;
+                    Console.WriteLine("Neispravan unos. Pokušajte ponovno.");
                 }
-
-                break;
-            }
-
+            } while (captchaInput != captcha);
 
             var request = new RegisterRequest
             {
@@ -121,21 +85,7 @@ namespace Moodle.Presentation.Menus
                 Captcha = captchaInput
             };
 
-            var result = await _authenticationService.RegisterAsync(request);
-
-            if (result.IsSuccess)
-            {
-                Console.WriteLine("Uspješna registracija."); ;
-            }
-            else
-            {
-                Console.WriteLine("Neuspješna registracija.");
-                foreach (var error in result.ValidationResult.GetErrorMessages())
-                {
-                    Console.WriteLine(error); ;
-                }
-            }
-
+            ConsoleHelper.DisplayResult(await _authenticationService.RegisterAsync(request), "Uspješna registracija.");
             ConsoleHelper.Continue();
         }
     }

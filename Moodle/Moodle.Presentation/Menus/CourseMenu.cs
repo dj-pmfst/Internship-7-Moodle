@@ -25,27 +25,24 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                var options = new List<string> { "Dodaj studenta", "Objavi obavijest", "Dodaj materijal" };
-
-                int n = options.Count;
-
-                var choice = KeyboardHelper.MenuGeneratorWithHybridInput(n, "Upravljanje kolegijima", options.ToArray());
+                var options = new[] { "Dodaj studenta", "Objavi obavijest", "Dodaj materijal" };
+                int choice = KeyboardHelper.MenuGeneratorWithHybridInput(options.Length, "Upravljanje kolegijima", options);
 
                 switch (choice)
                 {
-                    case 0:
+                    case 0: 
                         Environment.Exit(0);
                         break;
-                    case 1:
-                        await AddStudentAsync();
+                    case 1: 
+                        await AddStudentAsync(); 
                         break;
-                    case 2:
-                        await AddAnnouncementAsync();
+                    case 2: 
+                        await AddAnnouncementAsync(); 
                         break;
-                    case 3:
-                        await AddMaterialASync();
+                    case 3: 
+                        await AddMaterialAsync(); 
                         break;
-                    case 4:
+                    case -1: 
                         return;
                 }
 
@@ -60,50 +57,24 @@ namespace Moodle.Presentation.Menus
             var userService = scope.ServiceProvider.GetRequiredService<UserService>();
 
             ConsoleHelper.Title("Dodavanje studenta");
-
-            var students = await userService.GetAllStudentsAsync();
-            var studentList = students.ToList();
-
-            if (!studentList.Any())
-            {
+            var students = (await userService.GetAllStudentsAsync()).ToList();
+            if (!students.Any()) 
+            { 
                 Console.WriteLine("Nema studenata"); 
+                return; 
+            }
+
+            var student = MenuHelper.SelectFromList(students, "Odaberite studenta", s => $"{s.Name} - {s.Email}");
+            if (student == null) 
                 return;
-            }
 
-            Console.WriteLine("Dostupni studenti: \n");
-            for (int i = 0; i < studentList.Count; i++)
-            {
-                Console.WriteLine($"{studentList[i].Id}. {studentList[i].Name} - {studentList[i].Email}");
-            }
-
-            Console.Write("\nUnesite ID studenta kojeg želite dodati: ");
-
-            int studentId;
-            var validIds = studentList.Select(u => u.Id).ToHashSet();
-
-            while (true)
-            {
-                studentId = InputHelper.ReadInt();
-                if (validIds.Contains(studentId))
-                    break;
-            }
-
-            var request = new EnrollStudentRequest
+            var result = await courseService.EnrollStudentAsync(new EnrollStudentRequest
             {
                 CourseId = _courseId,
-                StudentId = studentId
-            };
+                StudentId = student.Id
+            });
 
-            var result = await courseService.EnrollStudentAsync(request);
-
-            if (result.IsSuccess)
-            {
-                Console.WriteLine($"Uspješno dodan student ID - {studentId}");
-            }
-            else
-            {
-                result.ValidationResult.GetErrorMessages().FirstOrDefault();
-            }
+            ConsoleHelper.DisplayResult(result, $"Uspješno dodan student ID - {student.Id}");
         }
 
         private async Task AddAnnouncementAsync()
@@ -116,30 +87,18 @@ namespace Moodle.Presentation.Menus
             var title = InputHelper.StringValid("Naslov: ");
             var text = InputHelper.StringValid("Tekst: ");
 
-            var request = new CreateAnnouncementRequest
+            var result = await announcementService.CreateAnnouncementAsync(new CreateAnnouncementRequest
             {
                 CourseId = _courseId,
                 ProfessorId = _currentUser.UserId,
                 Title = title,
                 Text = text
-            };
+            });
 
-            var result = await announcementService.CreateAnnouncementAsync(request);
-
-            if (result.IsSuccess)
-            {
-                Console.WriteLine("Uspješno objavljeno.");
-            }
-            else
-            {
-                foreach (var error in result.ValidationResult.GetErrorMessages())
-                {
-                    Console.WriteLine(error);
-                }
-            }
+            ConsoleHelper.DisplayResult(result, "Uspješno objavljeno.");
         }
 
-        private async Task AddMaterialASync()
+        private async Task AddMaterialAsync()
         {
             using var scope = _serviceProvider.CreateScope();
             var materialService = scope.ServiceProvider.GetRequiredService<MaterialService>();
@@ -149,26 +108,14 @@ namespace Moodle.Presentation.Menus
             var name = InputHelper.StringValid("Naziv: ");
             var url = InputHelper.StringValid("URL: ");
 
-            var request = new AddMaterialRequest
+            var result = await materialService.AddMaterialAsync(new AddMaterialRequest
             {
                 CourseId = _courseId,
                 Name = name,
                 Url = url
-            };
+            });
 
-            var result = await materialService.AddMaterialAsync(request);
-
-            if (result.IsSuccess)
-            {
-                Console.WriteLine("Uspješno dodan materijal");
-            }
-            else
-            {
-                foreach (var error in result.ValidationResult.GetErrorMessages())
-                {
-                    Console.WriteLine(error);
-                }
-            }
+            ConsoleHelper.DisplayResult(result, "Uspješno dodan materijal");
         }
     }
 }

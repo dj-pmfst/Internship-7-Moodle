@@ -72,7 +72,7 @@ namespace Moodle.Application.Services
 
             if (emailValidation.IsValid && await _unitOfWork.Users.EmailExistsAsync(request.Email))
             {
-                validationResult.AddError("EmailExists", "Email već postoji");
+                validationResult.AddError("EmailExists", "\nEmail već postoji");
             }
 
             if (!validationResult.IsValid)

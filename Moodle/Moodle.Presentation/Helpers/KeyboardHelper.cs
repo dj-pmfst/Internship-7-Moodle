@@ -36,7 +36,7 @@
                     {
                         Console.WriteLine($"> {n + 1} - Odjava");
                     }
-                    else
+                    else if (title != "Moodle")
                     {
                         Console.WriteLine($"> {n + 1} - Povratak");
                     }
@@ -48,7 +48,7 @@
                     {
                         Console.WriteLine($"  {n + 1} - Odjava");
                     }
-                    else
+                    else if (title != "Moodle")
                     {
                         Console.WriteLine($"  {n + 1} - Povratak");
                     }

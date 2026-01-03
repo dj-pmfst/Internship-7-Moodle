@@ -93,5 +93,17 @@
                 Console.Write("\nUnos ne može biti prazan: ");
             }
         }
+
+        public static string ErrInput(string message, string original)
+        {
+            string input;
+            while (true)
+            {
+                input = InputHelper.ReadPassword(message);
+                if (input != original) Console.WriteLine("Neispravan unos. Pokušajte ponovno.");
+                else break;
+            }
+            return input;
+        }
     }
 }

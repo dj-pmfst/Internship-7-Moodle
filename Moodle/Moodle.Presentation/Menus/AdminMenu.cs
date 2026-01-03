@@ -21,221 +21,98 @@ namespace Moodle.Presentation.Menus
         {
             while (true)
             {
-                var options = new List<string> { "Brisanje korisnika", "Uređivanje emaila", "Promjena uloge" };
-
-                int n = options.Count;
-
-                var choice = KeyboardHelper.MenuGeneratorWithHybridInput(n, "Upravljanje korisnicma", options.ToArray());
+                var options = new[] { "Brisanje korisnika", "Uređivanje emaila", "Promjena uloge" };
+                int choice = KeyboardHelper.MenuGeneratorWithHybridInput(options.Length, "Upravljanje korisnicima", options);
 
                 switch (choice)
                 {
-                    case 0:
-                        Environment.Exit(0);
+                    case 0: 
+                        Environment.Exit(0); 
                         break;
-                    case 1:
-                        await DeleteUserAsync();
+                    case 1: 
+                        await DeleteUserAsync(); 
                         break;
-                    case 2:
-                        await EditEmailAsync();
+                    case 2: 
+                        await EditEmailAsync(); 
                         break;
-                    case 3:
-                        await RoleChangeAsync();
+                    case 3: 
+                        await RoleChangeAsync(); 
                         break;
-                    case -1:
+                    case -1: 
                         return;
                 }
             }
         }
 
-        private async Task DeleteUserAsync()
+        private async Task<List<UserDTO>> GetAllUsersAsync()
         {
             using var scope = _serviceProvider.CreateScope();
             var userService = scope.ServiceProvider.GetRequiredService<UserService>();
-
-            ConsoleHelper.Title("Brisanje korisnika");
-
             var students = await userService.GetAllStudentsAsync();
             var professors = await userService.GetAllProfessorsAsync();
-            var allUsers = students.Concat(professors).ToList();
 
-            foreach (var user in allUsers)
-            {
-                Console.WriteLine($"{user.Id} - {user.Name} - {user.Email}");
-            }
+            return students.Concat(professors).ToList();
+        }
 
-            var validIds = allUsers.Select(u => u.Id).ToList();
+        private async Task DeleteUserAsync()
+        {
+            ConsoleHelper.Title("Brisanje korisnika");
 
-            int userId;
-            while (true)
-            {
-                Console.Write("\nUnesite ID korisnika kojeg želite izbrisati: ");
-                userId = InputHelper.ReadInt(); 
-
-                if (validIds.Contains(userId))
-                    break;
-
-                Console.WriteLine($"ID {userId} ne postoji. Pokušajte ponovno.");
-            }
-
-            if (!InputHelper.Confirmation(userId, "brisanje"))
-            {
+            var allUsers = await GetAllUsersAsync();
+            var user = MenuHelper.SelectFromList(allUsers, "Odaberite korisnika za brisanje", u => $"{u.Name} - {u.Email}");
+            if (user == null)
                 return;
-            }
 
-            var result = await userService.DeleteUserAsync(userId);
+            if (!InputHelper.Confirmation(user.Id, "brisanje")) 
+                return;
 
-            if (result.IsSuccess)
-            {
-                Console.WriteLine($"Uspješno izbrisan korisnik ID - {userId}");
-            }
-            else
-            {
-                result.ValidationResult.GetErrorMessages().FirstOrDefault();
-            }
+            using var scope = _serviceProvider.CreateScope();
+            var result = await scope.ServiceProvider.GetRequiredService<UserService>().DeleteUserAsync(user.Id);
 
+            ConsoleHelper.DisplayResult(result, $"Uspješno izbrisan korisnik ID - {user.Id}");
             ConsoleHelper.Continue();
         }
 
         private async Task EditEmailAsync()
         {
-            using var scope = _serviceProvider.CreateScope();
-            var userService = scope.ServiceProvider.GetRequiredService<UserService>();
-
             ConsoleHelper.Title("Izmjena emaila");
 
-            var students = await userService.GetAllStudentsAsync();
-            var professors = await userService.GetAllProfessorsAsync();
-            var allUsers = students.Concat(professors).ToList();
-
-            if (!allUsers.Any())
-            {
-                Console.WriteLine("Nema korisnika.");
-                ConsoleHelper.Continue();
+            var allUsers = await GetAllUsersAsync();
+            var user = MenuHelper.SelectFromList(allUsers, "Odaberite korisnika", u => $"{u.Name} - {u.Email}");
+            if (user == null) 
                 return;
-            }
 
-            foreach (var user in allUsers)
-            {
-                Console.WriteLine($"{user.Id} - {user.Name} - {user.Email}");
-            }
-
-            var validIds = allUsers.Select(u => u.Id).ToList();
-
-            int userId;
-            while (true)
-            {
-                Console.Write("\nUnesite ID korisnika: ");
-                userId = InputHelper.ReadInt();
-
-                if (validIds.Contains(userId))
-                    break;
-
-                Console.WriteLine($"ID {userId} ne postoji. Pokušajte ponovno.");
-            }
-
-            var selectedUser = allUsers.First(u => u.Id == userId);
-            Console.WriteLine($"\nTrenutni email: {selectedUser.Email}");
-
-            var newEmail = InputHelper.ReadEmail("Unesite novi email: ");
-
-            Console.WriteLine($"\nStari email: {selectedUser.Email}");
-            Console.WriteLine($"Novi email:  {newEmail}");
-
-            if (!InputHelper.Confirmation(userId, "izmjeniti"))
-            {
-                Console.WriteLine("otkazano");
-                ConsoleHelper.Continue();
+            var newEmail = InputHelper.ReadEmail($"Trenutni email: {user.Email}\nNovi email: ");
+            if (!InputHelper.Confirmation(user.Id, "izmjeniti")) 
                 return;
-            }
 
-            var request = new UpdateUserEmailRequest
-            {
-                UserId = userId,
-                NewEmail = newEmail
-            };
+            using var scope = _serviceProvider.CreateScope();
+            var result = await scope.ServiceProvider.GetRequiredService<UserService>().UpdateEmailAsync(
+                new UpdateUserEmailRequest { UserId = user.Id, NewEmail = newEmail });
 
-            var result = await userService.UpdateEmailAsync(request);
-
-            if (result.IsSuccess)
-            {
-                Console.WriteLine($"Email uspješno ažuriran na: {result.Value!.Email}");
-            }
-            else
-            {
-                foreach (var error in result.ValidationResult.GetErrorMessages())
-                {
-                    Console.WriteLine($"  - {error}");
-                }
-            }
-
+            ConsoleHelper.DisplayResult(result, $"Email uspješno ažuriran na: {newEmail}");
             ConsoleHelper.Continue();
         }
 
         private async Task RoleChangeAsync()
         {
-            using var scope = _serviceProvider.CreateScope();
-            var userService = scope.ServiceProvider.GetRequiredService<UserService>();
-
             ConsoleHelper.Title("Izmjena uloge");
 
-            var students = await userService.GetAllStudentsAsync();
-            var professors = await userService.GetAllProfessorsAsync();
-            var allUsers = students.Concat(professors).ToList();
-
-            if (!allUsers.Any())
-            {
-                Console.WriteLine("Nema korisnika.");
-                ConsoleHelper.Continue();
+            var allUsers = await GetAllUsersAsync();
+            var user = MenuHelper.SelectFromList(allUsers, "Odaberite korisnika", u => $"{u.Name} - {u.Email} ({u.Role})");
+            if (user == null) 
                 return;
-            }
 
-            foreach (var user in allUsers)
-            {
-                Console.WriteLine($"{user.Id} - {user.Name} - {user.Email} ({user.Role})");
-            }
-
-            var validIds = allUsers.Select(u => u.Id).ToHashSet();
-
-            int userId;
-            while (true)
-            {
-                Console.Write("\nUnesite ID korisnika: ");  
-                userId = InputHelper.ReadInt();
-
-                if (validIds.Contains(userId))
-                    break;
-
-                Console.WriteLine($"ID {userId} ne postoji. Pokušajte ponovno."); 
-            }
-
-            var selectedUser = allUsers.First(u => u.Id == userId);
-            Console.WriteLine($"\nTrenutna uloga: {selectedUser.Role}");
-            Console.WriteLine($"Nova uloga bit će: {(selectedUser.Role == Domain.Enums.Roles.student ? "profesor" : "student")}");
-
-            if (!InputHelper.Confirmation(userId, "izmjenu uloge"))
-            {
-                Console.WriteLine("Otkazano.");
-                ConsoleHelper.Continue();
+            Console.WriteLine($"Trenutna uloga: {user.Role}");
+            Console.WriteLine($"Nova uloga: {(user.Role == Domain.Enums.Roles.student ? "profesor" : "student")}");
+            if (!InputHelper.Confirmation(user.Id, "izmjenu uloge"))
                 return;
-            }
 
-            var request = new ChangeRoleRequest { UserId = userId };
-            var result = await userService.ChangeRoleAsync(request);
+            using var scope = _serviceProvider.CreateScope();
+            var result = await scope.ServiceProvider.GetRequiredService<UserService>().ChangeRoleAsync(
+                new ChangeRoleRequest { UserId = user.Id });
 
-            if (result.IsSuccess)
-            {
-                Console.WriteLine($"Uspješno izmjenjena uloga korisnika {selectedUser.Name}");
-                Console.WriteLine($"Nova uloga: {result.Value!.Role}");
-            }
-            else
-            {
-                Console.WriteLine("Neuspješna izmjena:");
-                foreach (var error in result.ValidationResult.GetErrorMessages())
-                {
-                    Console.WriteLine($"  - {error}");
-                }
-            }
-
+            ConsoleHelper.DisplayResult(result, $"Uspješno izmjenjena uloga korisnika {user.Name}");
             ConsoleHelper.Continue();
         }
     }

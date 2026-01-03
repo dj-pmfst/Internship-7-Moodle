@@ -21,18 +21,27 @@
             Console.ReadKey();
         }
 
-        public static string ErrInput()
-        {
-            Console.Write("\nNeispravan unos. \nUnesite opet. ");
-            return Console.ReadLine();
-        }
-
         public static void KeyboardNavigation()
         {
             Console.WriteLine("\n-----------------------------------");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.WriteLine("↑/↓ + Enter  ili  unesi broj + Enter  |  ESC za povratak");
             Console.ResetColor();
+        }
+
+        public static bool DisplayResult(dynamic result, string successMessage)
+        {
+            if (result.IsSuccess)
+            {
+                Console.WriteLine(successMessage);
+                return true;
+            }
+            else
+            {
+                foreach (var error in result.ValidationResult.GetErrorMessages())
+                    Console.WriteLine($"  - {error}");
+                return false;
+            }
         }
     }
 }
